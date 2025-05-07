@@ -1,9 +1,12 @@
 "use client";
-
-import { useGameContext } from "@/providers/GameProvider";
+import { BOARD_COLS, BOARD_ROWS, CELL_SIZE } from "@/constants/config";
+import { useGameContext } from "@/context/GameContext";
 import FruitCell from "./FruitCell";
+import { Fruit } from "@/types";
+import ResetButton from "@/components/ResetButton";
+import Score from "@/components/Score";
 
-export default function FruitBox() {
+export default function ActiveScreen() {
   const {
     fruits,
     gameContainerRef,
@@ -13,13 +16,10 @@ export default function FruitBox() {
     handlePointerMove,
     handlePointerUp,
     handlePointerLeave,
-    col,
-    row,
-    cellSize,
   } = useGameContext();
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div>
       <div
         ref={gameContainerRef}
         onPointerLeave={handlePointerLeave}
@@ -28,18 +28,18 @@ export default function FruitBox() {
         onPointerUp={handlePointerUp}
         className="relative border-1 select-none"
         style={{
-          width: `${col * cellSize}px`,
-          height: `${row * cellSize}px`,
+          width: `${BOARD_COLS * CELL_SIZE}px`,
+          height: `${BOARD_ROWS * CELL_SIZE}px`,
         }}
       >
         <div
           className="grid"
           style={{
-            gridTemplateRows: `repeat(${row}, minmax(0, 1fr))`,
-            gridTemplateColumns: `repeat(${col}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${BOARD_ROWS}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${BOARD_COLS}, minmax(0, 1fr))`,
           }}
         >
-          {fruits.map((fruit) => (
+          {fruits.map((fruit: Fruit) => (
             <FruitCell
               key={fruit.id}
               selected={userSelectedFruits.has(fruit.id)}
@@ -59,6 +59,10 @@ export default function FruitBox() {
             }}
           ></div>
         )}
+      </div>
+      <div>
+        <Score />
+        <ResetButton />
       </div>
     </div>
   );

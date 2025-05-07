@@ -1,5 +1,6 @@
-"use client";
-import { Fruit, useGameContext } from "@/providers/GameProvider";
+import { Fruit } from "@/types";
+import { CELL_SIZE } from "@/constants/config";
+
 export default function FruitCell({
   selected,
   fruit,
@@ -7,12 +8,11 @@ export default function FruitCell({
   selected: boolean;
   fruit: Fruit;
 }) {
-  const { cellSize } = useGameContext();
   if (fruit.consumed)
     return (
       <div
         className="border-1"
-        style={{ width: `${cellSize}px`, height: `${cellSize}px` }}
+        style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
       />
     );
   return (
@@ -20,7 +20,7 @@ export default function FruitCell({
       id={fruit.id}
       data-selectable="true"
       className={`border-1 ${selected && "bg-blue-500 text-white"}`}
-      style={{ width: `${cellSize}px`, height: `${cellSize}px` }}
+      style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
     >
       {fruit.value}
     </div>

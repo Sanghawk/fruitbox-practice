@@ -8,25 +8,11 @@ import {
   useRef,
   useEffect,
 } from "react";
-type Point = {
-  x: number;
-  y: number;
-};
-
-type Rect = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-};
-type FruitId = string;
-export type Fruit = {
-  id: FruitId;
-  value: number;
-  col: number;
-  row: number;
-  consumed: boolean;
-}; // Define the structure of the dashboard state
+import { Fruit, FruitId, Point, Rect } from "@/types";
+import { generateFruits } from "@/utils/gameHelpers";
+import { GameLifeCycle } from "@/types";
+import { GAME_DURATION } from "@/constants/config";
+// Define the structure of the dashboard state
 interface GameState {
   score: number;
   fruits: Fruit[];
@@ -34,9 +20,9 @@ interface GameState {
   userSelectBoxOrigin: Point | null;
   userSelectBoxRect: Rect | null;
   userSelectedFruits: Set<FruitId>;
-  row: number;
-  col: number;
-  cellSize: number;
+  gameStatus: GameLifeCycle;
+  intervalRef: React.RefObject<NodeJS.Timeout | null>;
+  timeLeft: number;
 }
 
 // Extend the state interface to include actions
@@ -45,32 +31,36 @@ interface GameContextType extends GameState {
   handlePointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
   handlePointerUp: () => void;
   handlePointerLeave: () => void;
+  handleGameStart: () => void;
+  handleGameReset: () => void;
 }
 
 // Create a context with an undefined default value
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 // Define the initial state of the dashboard
-const initialState: Omit<GameState, "gameContainerRef"> = {
+const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
   score: 0,
   fruits: [],
   userSelectBoxOrigin: null,
   userSelectBoxRect: null,
   userSelectedFruits: new Set(),
-  row: 0,
-  col: 0,
-  cellSize: 0,
+  gameStatus: GameLifeCycle.WAITING_USER_START,
+  timeLeft: 60,
 };
 
 type GameAction =
-  | { type: "SET_FRUITS"; payload: Fruit[] }
   | {
       type: "SET_SELECTION_BOX";
       payload: { origin: Point | null; rect: Rect | null };
     }
   | { type: "SET_SELECTED_FRUITS"; payload: Set<FruitId> }
   | { type: "CONSUME_FRUITS"; payload: Set<FruitId> }
-  | { type: "RESET_SELECTION" };
+  | { type: "RESET_SELECTION" }
+  | { type: "START_GAME"; payload: { fruits: Fruit[] } }
+  | { type: "RESET_GAME"; payload: { fruits: Fruit[] } }
+  | { type: "UPDATE_TIME"; payload: number }
+  | { type: "END_GAME" };
 
 /**
  * Reducer function for managing state updates.
@@ -81,8 +71,29 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   console.log("Action:", action);
 
   switch (action.type) {
-    case "SET_FRUITS":
-      return { ...state, fruits: action.payload };
+    case "START_GAME":
+      return {
+        ...initialState,
+        gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
+        gameContainerRef: state.gameContainerRef,
+        intervalRef: state.intervalRef,
+        fruits: action.payload.fruits,
+        timeLeft: 60,
+      };
+    case "RESET_GAME":
+      return {
+        ...initialState,
+        gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
+        gameContainerRef: state.gameContainerRef,
+        intervalRef: state.intervalRef,
+        fruits: action.payload.fruits,
+        timeLeft: 60,
+      };
+    case "END_GAME":
+      return {
+        ...state,
+        gameStatus: GameLifeCycle.GAME_OVER,
+      };
     case "SET_SELECTION_BOX":
       return {
         ...state,
@@ -97,6 +108,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         fruits: state.fruits.map((fruit) =>
           action.payload.has(fruit.id) ? { ...fruit, consumed: true } : fruit
         ),
+        score: state.score + action.payload.size,
       };
     case "RESET_SELECTION":
       return {
@@ -105,6 +117,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         userSelectBoxOrigin: null,
         userSelectBoxRect: null,
       };
+    case "UPDATE_TIME":
+      return { ...state, timeLeft: action.payload };
     default:
       return state;
   }
@@ -113,47 +127,68 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 /**
  * Provides the dashboard context to child components.
  */
-export function GameProvider({
-  children,
-  col,
-  row,
-  cellSize,
-}: {
-  children: ReactNode;
-  col: number;
-  row: number;
-  cellSize: number;
-}) {
+export function GameProvider({ children }: { children: ReactNode }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
-    row,
-    col,
-    cellSize,
     gameContainerRef,
+    intervalRef,
   });
 
-  // Initialize fruits on client-side only
+  function startTimer() {
+    let t = GAME_DURATION;
+    intervalRef.current = setInterval(() => {
+      console.log(state.timeLeft);
+      console.log(intervalRef.current);
+      console.log(t);
+      t = t - 1;
+      dispatch({
+        type: "UPDATE_TIME",
+        payload: t <= 1 ? 0 : t,
+      });
+
+      if (t <= 1) {
+        clearInterval(intervalRef.current as NodeJS.Timeout);
+      }
+    }, 1000);
+
+    /* --- cleanup on unmount OR when `running` toggles off --- */
+    return () => clearInterval(intervalRef.current as NodeJS.Timeout);
+  }
+
   useEffect(() => {
+    if (state.timeLeft === 0) {
+      dispatch({ type: "END_GAME" });
+    }
+  }, [state.timeLeft]);
+
+  function handleGameStart() {
+    clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
-      type: "SET_FRUITS",
-      payload: Array.from({ length: row * col }, (_, index) => ({
-        id: `fruit-${index}`,
-        value: Math.floor(Math.random() * 9) + 1,
-        col: index % col,
-        row: Math.floor(index / col),
-        consumed: false,
-      })),
+      type: "START_GAME",
+      payload: {
+        fruits: generateFruits(),
+      },
     });
-  }, [row, col]);
+    startTimer();
+  }
+  function handleGameReset() {
+    clearInterval(intervalRef.current as NodeJS.Timeout);
+    dispatch({
+      type: "RESET_GAME",
+      payload: {
+        fruits: generateFruits(),
+      },
+    });
+    startTimer();
+  }
 
   function handlePointerLeave() {
-    console.log("Pointer Leave Event");
     dispatch({ type: "RESET_SELECTION" });
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    console.log("Pointer Down Event");
     if (e.button !== 0 || !gameContainerRef.current) return;
     const containerBoundingRect =
       gameContainerRef.current.getBoundingClientRect();
@@ -224,7 +259,6 @@ export function GameProvider({
   }
 
   function handlePointerUp() {
-    console.log("Pointer Up Event");
     const selectedFruits = state.fruits.filter((fruit) =>
       state.userSelectedFruits.has(fruit.id)
     );
@@ -248,6 +282,8 @@ export function GameProvider({
         handlePointerMove,
         handlePointerUp,
         handlePointerLeave,
+        handleGameStart,
+        handleGameReset,
       }}
     >
       {children}
