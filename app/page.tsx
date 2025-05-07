@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 const DIM_ROW = 10;
 const DIM_COL = 10;
 
+type Point = {
+  x: number;
+  y: number;
+};
+
 export default function Home() {
   return (
     <div>
@@ -15,19 +20,13 @@ export default function Home() {
 function Box({ col, row }: { col: number; row: number }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [isSelecting, setIsSelecting] = useState(false);
-  const [origin, setOrigin] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-  const [current, setCurrent] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  const [origin, setOrigin] = useState<Point | null>(null);
+  const [current, setCurrent] = useState<Point | null>(null);
 
-  function handlePointerEnter() {
-    console.log("pointer enter");
-  }
   function handlePointerLeave() {
+    setIsSelecting(false);
+    setOrigin({ x: 0, y: 0 });
+    setCurrent({ x: 0, y: 0 });
     console.log("pointer leave");
   }
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
@@ -52,7 +51,6 @@ function Box({ col, row }: { col: number; row: number }) {
     <div className="h-screen flex items-center justify-center">
       <div
         ref={boxRef}
-        onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
