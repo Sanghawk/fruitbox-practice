@@ -5,4 +5,4 @@ export const BOARD_COLS = 25;
 /** Pixel size of each cell */
 export const CELL_SIZE = 35;
 /** Duration (s) of each game session */
-export const GAME_DURATION = 10;
+export const GAME_DURATION = 120;

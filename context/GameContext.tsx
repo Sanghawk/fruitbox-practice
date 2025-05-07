@@ -46,7 +46,7 @@ const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
   userSelectBoxRect: null,
   userSelectedFruits: new Set(),
   gameStatus: GameLifeCycle.WAITING_USER_START,
-  timeLeft: 60,
+  timeLeft: GAME_DURATION,
 };
 
 type GameAction =
@@ -78,7 +78,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         gameContainerRef: state.gameContainerRef,
         intervalRef: state.intervalRef,
         fruits: action.payload.fruits,
-        timeLeft: 60,
+        timeLeft: GAME_DURATION,
       };
     case "RESET_GAME":
       return {
@@ -87,7 +87,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         gameContainerRef: state.gameContainerRef,
         intervalRef: state.intervalRef,
         fruits: action.payload.fruits,
-        timeLeft: 60,
+        timeLeft: GAME_DURATION,
       };
     case "END_GAME":
       return {
@@ -139,9 +139,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
   function startTimer() {
     let t = GAME_DURATION;
     intervalRef.current = setInterval(() => {
-      console.log(state.timeLeft);
-      console.log(intervalRef.current);
-      console.log(t);
       t = t - 1;
       dispatch({
         type: "UPDATE_TIME",

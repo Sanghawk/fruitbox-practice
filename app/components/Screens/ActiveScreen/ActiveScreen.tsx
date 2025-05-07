@@ -5,6 +5,7 @@ import FruitCell from "./FruitCell";
 import { Fruit } from "@/types";
 import ResetButton from "@/components/ResetButton";
 import Score from "@/components/Score";
+import TimeLeft from "@/components/TimeLeft";
 
 export default function ActiveScreen() {
   const {
@@ -62,6 +63,7 @@ export default function ActiveScreen() {
       </div>
       <div>
         <Score />
+        <TimeLeft />
         <ResetButton />
       </div>
     </div>
