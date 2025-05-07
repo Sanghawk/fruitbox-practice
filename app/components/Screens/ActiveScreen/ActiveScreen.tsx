@@ -51,7 +51,7 @@ export default function ActiveScreen() {
 
         {userSelectBoxRect && (
           <div
-            className="absolute border-1"
+            className="absolute"
             style={{
               left: userSelectBoxRect.left,
               top: userSelectBoxRect.top,
