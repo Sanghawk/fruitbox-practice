@@ -34,6 +34,9 @@ interface GameState {
   userSelectBoxOrigin: Point | null;
   userSelectBoxRect: Rect | null;
   userSelectedFruits: Set<FruitId>;
+  row: number;
+  col: number;
+  cellSize: number;
 }
 
 // Extend the state interface to include actions
@@ -54,6 +57,9 @@ const initialState: Omit<GameState, "gameContainerRef"> = {
   userSelectBoxOrigin: null,
   userSelectBoxRect: null,
   userSelectedFruits: new Set(),
+  row: 0,
+  col: 0,
+  cellSize: 0,
 };
 
 type GameAction =
@@ -111,14 +117,19 @@ export function GameProvider({
   children,
   col,
   row,
+  cellSize,
 }: {
   children: ReactNode;
   col: number;
   row: number;
+  cellSize: number;
 }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
+    row,
+    col,
+    cellSize,
     gameContainerRef,
   });
 

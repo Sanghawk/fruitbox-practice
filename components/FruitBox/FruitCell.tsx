@@ -1,5 +1,5 @@
 "use client";
-import { Fruit } from "@/providers/GameProvider";
+import { Fruit, useGameContext } from "@/providers/GameProvider";
 export default function FruitCell({
   selected,
   fruit,
@@ -7,14 +7,20 @@ export default function FruitCell({
   selected: boolean;
   fruit: Fruit;
 }) {
-  if (fruit.consumed) return <div className="w-[25px] h-[25px] bg-gray-200" />;
+  const { cellSize } = useGameContext();
+  if (fruit.consumed)
+    return (
+      <div
+        className="border-1"
+        style={{ width: `${cellSize}px`, height: `${cellSize}px` }}
+      />
+    );
   return (
     <div
       id={fruit.id}
       data-selectable="true"
-      className={`w-[25px] h-[25px] border-1 ${
-        selected ? "bg-blue-500 text-white" : "bg-gray-200"
-      }`}
+      className={`border-1 ${selected && "bg-blue-500 text-white"}`}
+      style={{ width: `${cellSize}px`, height: `${cellSize}px` }}
     >
       {fruit.value}
     </div>

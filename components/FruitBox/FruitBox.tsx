@@ -13,6 +13,9 @@ export default function FruitBox() {
     handlePointerMove,
     handlePointerUp,
     handlePointerLeave,
+    col,
+    row,
+    cellSize,
   } = useGameContext();
 
   return (
@@ -23,10 +26,19 @@ export default function FruitBox() {
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-[250px] h-[250px] border-1 select-none"
+        className="relative border-1 select-none"
+        style={{
+          width: `${col * cellSize}px`,
+          height: `${row * cellSize}px`,
+        }}
       >
-        {/* 10 by 10 cells */}
-        <div className="grid grid-rows-10 grid-cols-10">
+        <div
+          className="grid"
+          style={{
+            gridTemplateRows: `repeat(${row}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${col}, minmax(0, 1fr))`,
+          }}
+        >
           {fruits.map((fruit) => (
             <FruitCell
               key={fruit.id}
