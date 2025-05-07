@@ -63,10 +63,10 @@ function Box({ col, row }: { col: number; row: number }) {
           <div
             className="absolute border-1"
             style={{
-              left: origin.x,
-              top: origin.y,
-              width: current.x - origin.x,
-              height: current.y - origin.y,
+              left: Math.min(origin.x, current.x),
+              top: Math.min(origin.y, current.y),
+              width: Math.abs(current.x - origin.x),
+              height: Math.abs(current.y - origin.y),
             }}
           ></div>
         )}
