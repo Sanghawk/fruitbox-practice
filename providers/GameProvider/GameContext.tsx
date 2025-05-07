@@ -56,12 +56,52 @@ const initialState: Omit<GameState, "gameContainerRef"> = {
   userSelectedFruits: new Set(),
 };
 
+type GameAction =
+  | { type: "SET_FRUITS"; payload: Fruit[] }
+  | {
+      type: "SET_SELECTION_BOX";
+      payload: { origin: Point | null; rect: Rect | null };
+    }
+  | { type: "SET_SELECTED_FRUITS"; payload: Set<FruitId> }
+  | { type: "CONSUME_FRUITS"; payload: Set<FruitId> }
+  | { type: "RESET_SELECTION" };
+
 /**
  * Reducer function for managing state updates.
  * It merges the current state with new partial updates.
  */
-function gameReducer(state: GameState, action: Partial<GameState>) {
-  return { ...state, ...action };
+function gameReducer(state: GameState, action: GameAction): GameState {
+  console.log("Previous State:", state);
+  console.log("Action:", action);
+
+  switch (action.type) {
+    case "SET_FRUITS":
+      return { ...state, fruits: action.payload };
+    case "SET_SELECTION_BOX":
+      return {
+        ...state,
+        userSelectBoxOrigin: action.payload.origin,
+        userSelectBoxRect: action.payload.rect,
+      };
+    case "SET_SELECTED_FRUITS":
+      return { ...state, userSelectedFruits: action.payload };
+    case "CONSUME_FRUITS":
+      return {
+        ...state,
+        fruits: state.fruits.map((fruit) =>
+          action.payload.has(fruit.id) ? { ...fruit, consumed: true } : fruit
+        ),
+      };
+    case "RESET_SELECTION":
+      return {
+        ...state,
+        userSelectedFruits: new Set(),
+        userSelectBoxOrigin: null,
+        userSelectBoxRect: null,
+      };
+    default:
+      return state;
+  }
 }
 
 /**
@@ -85,7 +125,8 @@ export function GameProvider({
   // Initialize fruits on client-side only
   useEffect(() => {
     dispatch({
-      fruits: Array.from({ length: row * col }, (_, index) => ({
+      type: "SET_FRUITS",
+      payload: Array.from({ length: row * col }, (_, index) => ({
         id: `fruit-${index}`,
         value: Math.floor(Math.random() * 9) + 1,
         col: index % col,
@@ -95,13 +136,46 @@ export function GameProvider({
     });
   }, [row, col]);
 
-  useEffect(() => {
-    if (!state.userSelectBoxRect || !gameContainerRef.current) return;
-    const rect = state.userSelectBoxRect;
-    const fruitIds = new Set<string>();
+  function handlePointerLeave() {
+    console.log("Pointer Leave Event");
+    dispatch({ type: "RESET_SELECTION" });
+  }
+
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    console.log("Pointer Down Event");
+    if (e.button !== 0 || !gameContainerRef.current) return;
     const containerBoundingRect =
       gameContainerRef.current.getBoundingClientRect();
 
+    const originX = e.clientX - containerBoundingRect.left;
+    const originY = e.clientY - containerBoundingRect.top;
+
+    dispatch({
+      type: "SET_SELECTION_BOX",
+      payload: {
+        origin: { x: originX, y: originY },
+        rect: { left: originX, top: originY, width: 0, height: 0 },
+      },
+    });
+  }
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!state.userSelectBoxOrigin || !gameContainerRef.current) return;
+    const containerBoundingRect =
+      gameContainerRef.current.getBoundingClientRect();
+
+    const originX = e.clientX - containerBoundingRect.left;
+    const originY = e.clientY - containerBoundingRect.top;
+
+    const newRect = {
+      left: Math.min(state.userSelectBoxOrigin.x, originX),
+      top: Math.min(state.userSelectBoxOrigin.y, originY),
+      width: Math.abs(originX - state.userSelectBoxOrigin.x),
+      height: Math.abs(originY - state.userSelectBoxOrigin.y),
+    };
+
+    // Find intersecting fruits
+    const fruitIds = new Set<string>();
     const fruitElements =
       gameContainerRef.current.querySelectorAll<HTMLElement>(
         "[data-selectable='true']"
@@ -115,70 +189,44 @@ export function GameProvider({
         bottom: fruitBoundingRect.bottom - containerBoundingRect.top,
       };
       const intersects = !(
-        rel.right < rect.left ||
-        rel.left > rect.left + rect.width ||
-        rel.bottom < rect.top ||
-        rel.top > rect.top + rect.height
+        rel.right < newRect.left ||
+        rel.left > newRect.left + newRect.width ||
+        rel.bottom < newRect.top ||
+        rel.top > newRect.top + newRect.height
       );
 
       if (intersects) fruitIds.add(fruitElement.id);
     });
 
     dispatch({
-      userSelectedFruits: fruitIds,
+      type: "SET_SELECTION_BOX",
+      payload: {
+        origin: state.userSelectBoxOrigin,
+        rect: newRect,
+      },
     });
-  }, [state.userSelectBoxRect]);
-  function handlePointerLeave() {
+
     dispatch({
-      userSelectBoxOrigin: null,
-      userSelectBoxRect: null,
+      type: "SET_SELECTED_FRUITS",
+      payload: fruitIds,
     });
   }
 
-  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (e.button !== 0 || !gameContainerRef.current) return;
-    const containerBoundingRect =
-      gameContainerRef.current.getBoundingClientRect();
-
-    const originX = e.clientX - containerBoundingRect.left;
-    const originY = e.clientY - containerBoundingRect.top;
-    // Set the origin and rect
-    dispatch({
-      userSelectBoxOrigin: {
-        x: originX,
-        y: originY,
-      },
-      userSelectBoxRect: {
-        left: originX,
-        top: originY,
-        width: 0,
-        height: 0,
-      },
-    });
-  }
-  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    // If not selecting or no origin or no container, do nothing
-    if (!state.userSelectBoxOrigin || !gameContainerRef.current) return;
-    const containerBoundingRect =
-      gameContainerRef.current.getBoundingClientRect();
-
-    const originX = e.clientX - containerBoundingRect.left;
-    const originY = e.clientY - containerBoundingRect.top;
-    // Update the rect
-    dispatch({
-      userSelectBoxRect: {
-        left: Math.min(state.userSelectBoxOrigin.x, originX),
-        top: Math.min(state.userSelectBoxOrigin.y, originY),
-        width: Math.abs(originX - state.userSelectBoxOrigin.x),
-        height: Math.abs(originY - state.userSelectBoxOrigin.y),
-      },
-    });
-  }
   function handlePointerUp() {
-    dispatch({
-      userSelectBoxOrigin: null,
-      userSelectBoxRect: null,
-    });
+    console.log("Pointer Up Event");
+    const selectedFruits = state.fruits.filter((fruit) =>
+      state.userSelectedFruits.has(fruit.id)
+    );
+    const sum = selectedFruits.reduce((acc, fruit) => acc + fruit.value, 0);
+
+    if (sum === 10) {
+      dispatch({
+        type: "CONSUME_FRUITS",
+        payload: state.userSelectedFruits,
+      });
+    }
+
+    dispatch({ type: "RESET_SELECTION" });
   }
 
   return (

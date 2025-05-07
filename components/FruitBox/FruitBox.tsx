@@ -23,7 +23,7 @@ export default function FruitBox() {
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-[500px] h-[500px] border-1 select-none"
+        className="relative w-[250px] h-[250px] border-1 select-none"
       >
         {/* 10 by 10 cells */}
         <div className="grid grid-rows-10 grid-cols-10">

@@ -7,11 +7,12 @@ export default function FruitCell({
   selected: boolean;
   fruit: Fruit;
 }) {
+  if (fruit.consumed) return <div className="w-[25px] h-[25px] bg-gray-200" />;
   return (
     <div
       id={fruit.id}
       data-selectable="true"
-      className={`w-[50px] h-[50px] border-1 ${
+      className={`w-[25px] h-[25px] border-1 ${
         selected ? "bg-blue-500 text-white" : "bg-gray-200"
       }`}
     >
