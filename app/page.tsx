@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DIM_ROW = 10;
 const DIM_COL = 10;
@@ -28,6 +28,36 @@ function FruitBox({ col, row }: { col: number; row: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState<Point | null>(null);
   const [rect, setRect] = useState<Rect | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (!rect || !containerRef.current) return;
+
+    const fruitIds = new Set<string>();
+    const containerBoundingRect = containerRef.current.getBoundingClientRect();
+
+    const fruitElements = containerRef.current.querySelectorAll<HTMLElement>(
+      "[data-selectable='true']"
+    );
+    fruitElements.forEach((fruitElement) => {
+      const fruitBoundingRect = fruitElement.getBoundingClientRect();
+      const rel = {
+        left: fruitBoundingRect.left - containerBoundingRect.left,
+        right: fruitBoundingRect.right - containerBoundingRect.left,
+        top: fruitBoundingRect.top - containerBoundingRect.top,
+        bottom: fruitBoundingRect.bottom - containerBoundingRect.top,
+      };
+      const intersects = !(
+        rel.right < rect.left ||
+        rel.left > rect.left + rect.width ||
+        rel.bottom < rect.top ||
+        rel.top > rect.top + rect.height
+      );
+
+      if (intersects) fruitIds.add(fruitElement.id);
+    });
+
+    setSelected(fruitIds);
+  }, [rect]);
 
   function handlePointerLeave() {
     setOrigin(null);
@@ -81,8 +111,30 @@ function FruitBox({ col, row }: { col: number; row: number }) {
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-[500px] h-[500px] border-1"
+        className="relative w-[500px] h-[500px] border-1 select-none"
       >
+        {/* 10 by 10 cells */}
+        <div className="grid grid-rows-10">
+          {Array.from({ length: row }).map((_, i) => (
+            <div key={i} className="grid grid-cols-10">
+              {Array.from({ length: col }).map((_, j) => (
+                <div
+                  key={j}
+                  id={`${i}-${j}`}
+                  data-selectable="true"
+                  className={`w-[50px] h-[50px] border-1 ${
+                    selected.has(`${i}-${j}`)
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  ({j}, {i})
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
         {rect && (
           <div
             className="absolute border-1"
