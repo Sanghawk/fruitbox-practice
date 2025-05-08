@@ -38,7 +38,7 @@ function Results() {
   const [scores, setScores] = useState<Score[]>([]);
 
   useEffect(() => {
-    fetch("/api/score?limit=20")
+    fetch("/api/score?limit=3")
       .then((res) => res.json())
       .then((data) => setScores(data));
   }, []);

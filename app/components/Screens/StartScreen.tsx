@@ -27,10 +27,9 @@ function Instructions() {
       <p>
         Tenzy is a game where you have select numbers on a grid that sum to ten!
         Point are based on how many numbers on the grid you have cleared. You
-        have 120 seconds to clear as many numbers as possible.
+        have 90 seconds to clear as many numbers as possible.
       </p>
       <p>Good luck!</p>
-
     </div>
   );
 }
