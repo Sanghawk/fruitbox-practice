@@ -62,7 +62,6 @@ export default function ActiveScreen() {
               />
             ))}
           </div>
-
           {userSelectBoxRect && (
             <div
               className="absolute"

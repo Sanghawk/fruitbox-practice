@@ -9,3 +9,4 @@ function ScreenContainer({ children }: { children: ReactNode }) {
 }
 
 export { GameContainer, ScreenContainer };
+

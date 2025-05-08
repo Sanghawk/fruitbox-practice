@@ -18,3 +18,4 @@ export function generateGameGridCells(): GameGridCell[] {
 export function getRandomGameGridCellValue(): number {
   return Math.floor(Math.random() * 9) + 1;
 }
+

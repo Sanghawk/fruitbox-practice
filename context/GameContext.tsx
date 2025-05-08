@@ -13,6 +13,7 @@ import {
   generateGameGridCells,
   getRandomGameGridCellValue,
 } from "@/utils/gameHelpers";
+
 import { GameLifeCycle } from "@/types";
 import { GAME_DURATION } from "@/constants/config";
 // Define the structure of the dashboard state

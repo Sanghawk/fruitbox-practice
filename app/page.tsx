@@ -37,5 +37,6 @@ function Header() {
         <h1 className="text-2xl font-mono font-bold">while you wait</h1>
       </div>
     </header>
+
   );
 }

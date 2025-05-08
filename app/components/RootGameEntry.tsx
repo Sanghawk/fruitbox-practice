@@ -3,6 +3,7 @@ import { useGameContext } from "@/context/GameContext";
 import { GameLifeCycle } from "@/types";
 
 import { GameContainer, ScreenContainer } from "./GameContainer";
+
 import { StartScreen, ActiveScreen, EndScreen } from "./Screens";
 
 export default function RootGameEntry() {

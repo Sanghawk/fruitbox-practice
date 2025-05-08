@@ -1,5 +1,4 @@
 import StartButton from "@/components/StartButton";
-
 export default function StartScreen() {
   return (
     <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
@@ -31,6 +30,7 @@ function Instructions() {
         have 120 seconds to clear as many numbers as possible.
       </p>
       <p>Good luck!</p>
+
     </div>
   );
 }
