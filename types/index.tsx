@@ -10,14 +10,13 @@ export type Rect = {
   height: number;
 };
 
-export type FruitId = string;
+export type GameGridCellId = string;
 
-export type Fruit = {
-  id: FruitId;
+export type GameGridCell = {
+  id: GameGridCellId;
   value: number;
   col: number;
   row: number;
-  consumed: boolean;
 };
 
 export enum GameLifeCycle {
