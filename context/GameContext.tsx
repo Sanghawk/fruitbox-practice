@@ -9,7 +9,7 @@ import {
   useEffect,
 } from "react";
 import { Fruit, FruitId, Point, Rect } from "@/types";
-import { generateFruits } from "@/utils/gameHelpers";
+import { generateFruits, getRandomFruitValue } from "@/utils/gameHelpers";
 import { GameLifeCycle } from "@/types";
 import { GAME_DURATION } from "@/constants/config";
 // Define the structure of the dashboard state
@@ -106,7 +106,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         fruits: state.fruits.map((fruit) =>
-          action.payload.has(fruit.id) ? { ...fruit, consumed: true } : fruit
+          action.payload.has(fruit.id)
+            ? { ...fruit, value: getRandomFruitValue() }
+            : fruit
         ),
         score: state.score + action.payload.size,
       };

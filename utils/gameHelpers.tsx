@@ -9,9 +9,13 @@ export function generateFruits(): Fruit[] {
   const total = BOARD_ROWS * BOARD_COLS;
   return Array.from({ length: total }, (_, i) => ({
     id: `fruit-${i}`,
-    value: Math.floor(Math.random() * 9) + 1,
+    value: getRandomFruitValue(),
     col: i % BOARD_COLS,
     row: Math.floor(i / BOARD_COLS),
     consumed: false,
   }));
+}
+
+export function getRandomFruitValue(): number {
+  return Math.floor(Math.random() * 9) + 1;
 }

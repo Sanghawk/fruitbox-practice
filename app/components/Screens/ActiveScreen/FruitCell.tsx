@@ -9,13 +9,6 @@ export default function FruitCell({
   selected: boolean;
   fruit: Fruit;
 }) {
-  if (fruit.consumed)
-    return (
-      <div
-        className=""
-        style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
-      />
-    );
   return (
     <div
       id={fruit.id}
