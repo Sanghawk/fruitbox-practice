@@ -4,13 +4,13 @@ import { useGameContext } from "@/context/GameContext";
 import FruitCell from "./FruitCell";
 import { Fruit } from "@/types";
 import ResetButton from "@/components/ResetButton";
-import Score from "@/components/Score";
 import TimeLeft from "@/components/TimeLeft";
 import clsx from "clsx";
 
 export default function ActiveScreen() {
   const {
     fruits,
+    score,
     gameContainerRef,
     userSelectBoxRect,
     userSelectedFruits,
@@ -80,7 +80,9 @@ export default function ActiveScreen() {
           style={{ width: `${BOARD_COLS * CELL_SIZE}px` }}
         >
           <div className="flex flex-row justify-between">
-            <Score />
+            <div>
+              <p>Score: {score}</p>
+            </div>
             <TimeLeft />
           </div>
         </div>
