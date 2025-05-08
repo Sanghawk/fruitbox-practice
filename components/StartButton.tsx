@@ -9,7 +9,7 @@ export default function StartButton() {
 
   return (
     <button
-      className="w-full rounded-md bg-fuchsia-500 px-4 py-2 text-sm font-semibold text-base-50"
+      className="w-full rounded-md bg-base-900 px-4 py-2 text-sm font-semibold text-base-50"
       onClick={handleGameStart}
     >
       Start
