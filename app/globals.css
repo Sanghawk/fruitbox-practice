@@ -5,12 +5,15 @@
   --background: var(--color-base-50);
   --foreground: var(--color-base-950);
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: var(--color-base-950);
     --foreground: var(--color-base-50);
   }
 }
+
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -22,10 +25,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-base-700); 
+  background: var(--color-base-700);
   border-radius: var(--radius-lg);
 }
 
+/* Theme Colors */
 @theme {
   --color-base-50: oklch(0.985 0 0);
   --color-base-100: oklch(0.967 0.001 286.375);
@@ -35,72 +39,91 @@
   --color-base-500: oklch(0.552 0.016 285.938);
   --color-base-600: oklch(0.442 0.017 285.786);
   --color-base-625: oklch(0.414 0.01575 285.795);
-  --color-base-650: oklch(0.392 0.0145 285.800);
+  --color-base-650: oklch(0.392 0.0145 285.8);
   --color-base-675: oklch(0.378 0.01375 285.803);
   --color-base-700: oklch(0.37 0.013 285.805);
   --color-base-725: oklch(0.339 0.01175 285.815);
   --color-base-750: oklch(0.312 0.0105 285.825);
-  --color-base-775: oklch(0.293 0.00875 285.900);
+  --color-base-775: oklch(0.293 0.00875 285.9);
   --color-base-800: oklch(0.274 0.006 286.033);
-  --color-base-825: oklch(0.254 0.006 285.980);
-  --color-base-850: oklch(0.235 0.006 285.930);
-  --color-base-875: oklch(0.223 0.006 285.910);
+  --color-base-825: oklch(0.254 0.006 285.98);
+  --color-base-850: oklch(0.235 0.006 285.93);
+  --color-base-875: oklch(0.223 0.006 285.91);
   --color-base-900: oklch(0.21 0.006 285.885);
   --color-base-925: oklch(0.176 0.0055 285.854);
   --color-base-950: oklch(0.141 0.005 285.823);
 }
 
+/* Utility Classes */
 @layer utilities {
   .base-bg-and-text {
     @apply bg-base-50 dark:bg-base-950 text-base-950 dark:text-base-50;
   }
 }
 
+/* Component Classes */
 @layer components {
+  .text-input {
+    @apply rounded-md 
+      border-1
+      py-1
+      px-2
+      border-base-300 
+      dark:border-base-600 
+      transition-all 
+      duration-150 
+      focus:outline-none 
+      focus:ring-2 
+      focus:ring-offset-2 
+      focus:ring-base-700;
+  }
+
   .btn {
     @apply cursor-pointer
-    rounded-md 
-    inline-flex 
-    items-center 
-    justify-center 
-    select-none 
-    whitespace-nowrap 
-    align-middle 
-    font-medium 
-    transition-all 
-    duration-150 
-    focus:outline-none 
-    focus:ring-2 
-    focus:ring-offset-2 
-    disabled:opacity-50 
-    disabled:cursor-not-allowed 
-    active:scale-95;
+      rounded-md 
+      inline-flex 
+      items-center 
+      justify-center 
+      select-none 
+      whitespace-nowrap 
+      align-middle 
+      font-medium 
+      transition-all 
+      duration-150 
+      focus:outline-none 
+      focus:ring-2 
+      focus:ring-offset-2 
+      disabled:opacity-50 
+      disabled:cursor-not-allowed 
+      active:scale-95;
   }
+
   .btn-sm {
     @apply px-3 py-1.5 text-sm;
   }
+
   .btn-md {
     @apply px-4 py-2 text-base;
   }
+
   .btn-lg {
     @apply px-5 py-3 text-lg;
   }
+
   .btn-primary {
     @apply bg-base-900 
-    hover:bg-base-800 
-    focus:ring-base-700 
-    text-base-200
-    dark:bg-base-900 
-    dark:hover:bg-base-800 
-    dark:focus:ring-base-700; 
+      hover:bg-base-800 
+      focus:ring-base-700 
+      text-base-200
+      dark:bg-base-900 
+      dark:hover:bg-base-800 
+      dark:focus:ring-base-700;
   }
-
 }
 
-
+/* Base Styles */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: inter, system-ui;
 }
-

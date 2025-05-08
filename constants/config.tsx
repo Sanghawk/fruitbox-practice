@@ -7,4 +7,4 @@ export const CELL_SIZE = 44;
 /** Duration (s) of each game session */
 // NOTE: I need to change this back to 120
 
-export const GAME_DURATION = 10;
+export const GAME_DURATION = 5;
