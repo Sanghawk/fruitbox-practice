@@ -1,17 +1,17 @@
-import { Fruit } from "@/types";
+import { GameGridCell as GameGridCellType } from "@/types";
 import { CELL_SIZE } from "@/constants/config";
 import clsx from "clsx";
 
-export default function FruitCell({
+export default function GameGridCell({
   selected,
-  fruit,
+  gameGridCell,
 }: {
   selected: boolean;
-  fruit: Fruit;
+  gameGridCell: GameGridCellType;
 }) {
   return (
     <div
-      id={fruit.id}
+      id={gameGridCell.id}
       data-selectable
       className={clsx(
         "flex items-center justify-center font-mono cursor-pointer",
@@ -23,7 +23,7 @@ export default function FruitCell({
       )}
       style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
     >
-      {fruit.value}
+      {gameGridCell.value}
     </div>
   );
 }

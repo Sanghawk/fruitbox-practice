@@ -8,18 +8,21 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { Fruit, FruitId, Point, Rect } from "@/types";
-import { generateFruits, getRandomFruitValue } from "@/utils/gameHelpers";
+import { GameGridCell, GameGridCellId, Point, Rect } from "@/types";
+import {
+  generateGameGridCells,
+  getRandomGameGridCellValue,
+} from "@/utils/gameHelpers";
 import { GameLifeCycle } from "@/types";
 import { GAME_DURATION } from "@/constants/config";
 // Define the structure of the dashboard state
 interface GameState {
   score: number;
-  fruits: Fruit[];
+  gameGridCells: GameGridCell[];
   gameContainerRef: React.RefObject<HTMLDivElement | null>;
   userSelectBoxOrigin: Point | null;
   userSelectBoxRect: Rect | null;
-  userSelectedFruits: Set<FruitId>;
+  userSelectedGameGridCells: Set<GameGridCellId>;
   gameStatus: GameLifeCycle;
   intervalRef: React.RefObject<NodeJS.Timeout | null>;
   timeLeft: number;
@@ -41,10 +44,10 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 // Define the initial state of the dashboard
 const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
   score: 0,
-  fruits: [],
+  gameGridCells: [],
   userSelectBoxOrigin: null,
   userSelectBoxRect: null,
-  userSelectedFruits: new Set(),
+  userSelectedGameGridCells: new Set(),
   gameStatus: GameLifeCycle.WAITING_USER_START,
   timeLeft: GAME_DURATION,
 };
@@ -54,11 +57,11 @@ type GameAction =
       type: "SET_SELECTION_BOX";
       payload: { origin: Point | null; rect: Rect | null };
     }
-  | { type: "SET_SELECTED_FRUITS"; payload: Set<FruitId> }
-  | { type: "CONSUME_FRUITS"; payload: Set<FruitId> }
+  | { type: "SET_SELECTED_GAME_GRID_CELLS"; payload: Set<GameGridCellId> }
+  | { type: "CONSUME_GAME_GRID_CELLS"; payload: Set<GameGridCellId> }
   | { type: "RESET_SELECTION" }
-  | { type: "START_GAME"; payload: { fruits: Fruit[] } }
-  | { type: "RESET_GAME"; payload: { fruits: Fruit[] } }
+  | { type: "START_GAME"; payload: { gameGridCells: GameGridCell[] } }
+  | { type: "RESET_GAME"; payload: { gameGridCells: GameGridCell[] } }
   | { type: "UPDATE_TIME"; payload: number }
   | { type: "END_GAME" };
 
@@ -77,7 +80,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
         intervalRef: state.intervalRef,
-        fruits: action.payload.fruits,
+        gameGridCells: action.payload.gameGridCells,
         timeLeft: GAME_DURATION,
       };
     case "RESET_GAME":
@@ -86,7 +89,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
         intervalRef: state.intervalRef,
-        fruits: action.payload.fruits,
+        gameGridCells: action.payload.gameGridCells,
         timeLeft: GAME_DURATION,
       };
     case "END_GAME":
@@ -100,22 +103,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         userSelectBoxOrigin: action.payload.origin,
         userSelectBoxRect: action.payload.rect,
       };
-    case "SET_SELECTED_FRUITS":
-      return { ...state, userSelectedFruits: action.payload };
-    case "CONSUME_FRUITS":
+    case "SET_SELECTED_GAME_GRID_CELLS":
+      return { ...state, userSelectedGameGridCells: action.payload };
+    case "CONSUME_GAME_GRID_CELLS":
       return {
         ...state,
-        fruits: state.fruits.map((fruit) =>
-          action.payload.has(fruit.id)
-            ? { ...fruit, value: getRandomFruitValue() }
-            : fruit
+        gameGridCells: state.gameGridCells.map((gameGridCell) =>
+          action.payload.has(gameGridCell.id)
+            ? { ...gameGridCell, value: getRandomGameGridCellValue() }
+            : gameGridCell
         ),
         score: state.score + action.payload.size,
       };
     case "RESET_SELECTION":
       return {
         ...state,
-        userSelectedFruits: new Set(),
+        userSelectedGameGridCells: new Set(),
         userSelectBoxOrigin: null,
         userSelectBoxRect: null,
       };
@@ -167,7 +170,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({
       type: "START_GAME",
       payload: {
-        fruits: generateFruits(),
+        gameGridCells: generateGameGridCells(),
       },
     });
     startTimer();
@@ -177,7 +180,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({
       type: "RESET_GAME",
       payload: {
-        fruits: generateFruits(),
+        gameGridCells: generateGameGridCells(),
       },
     });
     startTimer();
@@ -220,18 +223,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
     };
 
     // Find intersecting fruits
-    const fruitIds = new Set<string>();
-    const fruitElements =
+    const gameGridCellIds = new Set<string>();
+    const gameGridCellElements =
       gameContainerRef.current.querySelectorAll<HTMLElement>(
         "[data-selectable='true']"
       );
-    fruitElements.forEach((fruitElement) => {
-      const fruitBoundingRect = fruitElement.getBoundingClientRect();
+    gameGridCellElements.forEach((gameGridCellElement) => {
+      const gameGridCellBoundingRect =
+        gameGridCellElement.getBoundingClientRect();
       const rel = {
-        left: fruitBoundingRect.left - containerBoundingRect.left,
-        right: fruitBoundingRect.right - containerBoundingRect.left,
-        top: fruitBoundingRect.top - containerBoundingRect.top,
-        bottom: fruitBoundingRect.bottom - containerBoundingRect.top,
+        left: gameGridCellBoundingRect.left - containerBoundingRect.left,
+        right: gameGridCellBoundingRect.right - containerBoundingRect.left,
+        top: gameGridCellBoundingRect.top - containerBoundingRect.top,
+        bottom: gameGridCellBoundingRect.bottom - containerBoundingRect.top,
       };
       const intersects = !(
         rel.right < newRect.left ||
@@ -240,7 +244,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         rel.top > newRect.top + newRect.height
       );
 
-      if (intersects) fruitIds.add(fruitElement.id);
+      if (intersects) gameGridCellIds.add(gameGridCellElement.id);
     });
 
     dispatch({
@@ -252,21 +256,24 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
 
     dispatch({
-      type: "SET_SELECTED_FRUITS",
-      payload: fruitIds,
+      type: "SET_SELECTED_GAME_GRID_CELLS",
+      payload: gameGridCellIds,
     });
   }
 
   function handlePointerUp() {
-    const selectedFruits = state.fruits.filter((fruit) =>
-      state.userSelectedFruits.has(fruit.id)
+    const selectedGameGridCells = state.gameGridCells.filter((gameGridCell) =>
+      state.userSelectedGameGridCells.has(gameGridCell.id)
     );
-    const sum = selectedFruits.reduce((acc, fruit) => acc + fruit.value, 0);
+    const sum = selectedGameGridCells.reduce(
+      (acc, gameGridCell) => acc + gameGridCell.value,
+      0
+    );
 
     if (sum === 10) {
       dispatch({
-        type: "CONSUME_FRUITS",
-        payload: state.userSelectedFruits,
+        type: "CONSUME_GAME_GRID_CELLS",
+        payload: state.userSelectedGameGridCells,
       });
     }
 

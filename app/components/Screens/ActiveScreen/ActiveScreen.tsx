@@ -1,19 +1,19 @@
 "use client";
 import { BOARD_COLS, BOARD_ROWS, CELL_SIZE } from "@/constants/config";
 import { useGameContext } from "@/context/GameContext";
-import FruitCell from "./FruitCell";
-import { Fruit } from "@/types";
+import GameGridCell from "./GameGridCell";
+import { GameGridCell as GameGridCellType } from "@/types";
 import ResetButton from "@/components/ResetButton";
 import TimeLeft from "@/components/TimeLeft";
 import clsx from "clsx";
 
 export default function ActiveScreen() {
   const {
-    fruits,
+    gameGridCells,
     score,
     gameContainerRef,
     userSelectBoxRect,
-    userSelectedFruits,
+    userSelectedGameGridCells,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -54,11 +54,11 @@ export default function ActiveScreen() {
               gridTemplateColumns: `repeat(${BOARD_COLS}, minmax(0, 1fr))`,
             }}
           >
-            {fruits.map((fruit: Fruit) => (
-              <FruitCell
-                key={fruit.id}
-                selected={userSelectedFruits.has(fruit.id)}
-                fruit={fruit}
+            {gameGridCells.map((gameGridCell: GameGridCellType) => (
+              <GameGridCell
+                key={gameGridCell.id}
+                selected={userSelectedGameGridCells.has(gameGridCell.id)}
+                gameGridCell={gameGridCell}
               />
             ))}
           </div>
