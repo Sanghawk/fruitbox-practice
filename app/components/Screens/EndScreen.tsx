@@ -4,6 +4,14 @@ import { SubmitScoreForm } from "@/components/SubmitScoreForm";
 import { useGameContext } from "@/context/GameContext";
 import { useState, useEffect } from "react";
 
+interface Score {
+  id: string;
+  value: number;
+  user: {
+    name: string;
+  };
+}
+
 export default function EndScreen() {
   return (
     <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
@@ -27,7 +35,7 @@ export default function EndScreen() {
 
 function Results() {
   const { score } = useGameContext();
-  const [scores, setScores] = useState<any[]>([]);
+  const [scores, setScores] = useState<Score[]>([]);
 
   useEffect(() => {
     fetch("/api/score?limit=20")
