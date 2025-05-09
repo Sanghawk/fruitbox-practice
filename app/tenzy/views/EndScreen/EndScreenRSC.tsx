@@ -1,8 +1,19 @@
 import StartButtonRCC from "@/app/tenzy/components/StartButtonRCC";
 import CtxConditionalRenderEndScreen from "./CtxConditionalRenderEndScreen";
-import ResultsRCC from "./ResultsRCC";
+import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
+import FinalScoreMessageRCC from "./FinalScoreMessageRCC";
+import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
+import prisma from "@/lib/prisma";
 
-export default function EndScreenRSC() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function EndScreenRSC() {
+  const topScores = await prisma.score.findMany({
+    orderBy: [{ value: "desc" }, { createdAt: "desc" }],
+    take: 3,
+    include: { user: true },
+  });
   return (
     <CtxConditionalRenderEndScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
@@ -12,11 +23,21 @@ export default function EndScreenRSC() {
               <div className="text-center mb-4">
                 <h2 className="text-4xl font-bold">Game Over</h2>
               </div>
-              <ResultsRCC />
+              <div className="flex flex-col gap-4">
+                <FinalScoreMessageRCC />
+                <div className="flex flex-col gap-2">
+                  <p>Submit your score on the leaderboard:</p>
+                  <SubmitScoreForm />
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <LeaderboardRSC scores={topScores} />
+              </div>
             </div>
 
             <div>
-              <StartButtonRCC />
+              <StartButtonRCC text="Play again" />
             </div>
           </div>
         </div>

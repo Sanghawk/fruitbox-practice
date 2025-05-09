@@ -66,7 +66,6 @@ export function computeSpawnProbabilities(grid: GameGridCell[]): number[] {
     counts[cell.value - 1]++;
   }
   const A = counts.map((c) => c / TOTAL);
-  console.log("counts", counts);
 
   // 2) Static triangular target Traw = [1,2,3,4,5,4,3,2,1]
   const Traw = [1, 2, 3, 4, 5, 4, 3, 2, 1];

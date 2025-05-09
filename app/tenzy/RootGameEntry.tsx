@@ -1,11 +1,11 @@
-import Views from "./views";
+import { StartScreen, ActiveScreen, EndScreen } from "./views";
 
 export default function RootGameEntry() {
   return (
     <div>
-      <Views.StartScreen />
-      <Views.ActiveScreen />
-      <Views.EndScreen />
+      <StartScreen />
+      <ActiveScreen />
+      <EndScreen />
     </div>
   );
 }
