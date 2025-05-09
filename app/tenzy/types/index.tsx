@@ -24,3 +24,10 @@ export enum GameLifeCycle {
   GAME_IN_PROGRESS,
   GAME_OVER,
 }
+export type Score = {
+  id: string;
+  value: number;
+  user: {
+    name: string;
+  };
+};

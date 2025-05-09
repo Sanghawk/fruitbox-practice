@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useGameContext } from "@/app/tenzy/context/GameContext";
 
-export function SubmitScoreForm({ finalScore }: { finalScore: number }) {
+export function SubmitScoreForm() {
+  const { score } = useGameContext();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
@@ -22,15 +24,17 @@ export function SubmitScoreForm({ finalScore }: { finalScore: number }) {
     const res = await fetch("/api/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, score: finalScore, sessionId }),
+      body: JSON.stringify({ name, score: score, sessionId }),
     });
     setStatus(res.ok ? "done" : "error");
   }
 
   if (status === "done")
     return (
-      <div className="ring-1 ring-green-500/20 text-green-500 bg-green-500/10 font-semibold rounded-md px-2 py-1">
-        Score submitted! 🎉
+      <div className="flex flex-col gap-2">
+        <div className="ring-1 ring-green-500/20 text-green-500 bg-green-500/10 font-semibold rounded-md px-2 py-1">
+          Score submitted! 🎉
+        </div>
       </div>
     );
 
@@ -41,6 +45,7 @@ export function SubmitScoreForm({ finalScore }: { finalScore: number }) {
           required
           placeholder="Enter your name"
           value={name}
+          maxLength={32}
           onChange={(e) => setName(e.target.value)}
           className="text-input w-full"
         />

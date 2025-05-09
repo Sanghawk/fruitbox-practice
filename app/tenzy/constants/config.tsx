@@ -8,3 +8,6 @@ export const CELL_SIZE = 44;
 // NOTE: I need to change this back to 120
 
 export const GAME_DURATION = 90;
+
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";

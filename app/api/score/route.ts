@@ -33,10 +33,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request & { nextUrl: URL }) {
-  const limit = Number(req.nextUrl.searchParams.get("limit") || 10);
+  const limit = req.nextUrl.searchParams.get("limit");
   const top = await prisma.score.findMany({
     orderBy: [{ value: "desc" }, { createdAt: "desc" }],
-    take: limit,
+    ...(limit ? { take: Number(limit) } : {}),
     include: { user: true },
   });
   return NextResponse.json(top);
