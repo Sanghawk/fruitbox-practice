@@ -73,9 +73,6 @@ type GameAction =
  * It merges the current state with new partial updates.
  */
 function gameReducer(state: GameState, action: GameAction): GameState {
-  console.log("Previous State:", state);
-  console.log("Action:", action);
-
   switch (action.type) {
     case "START_GAME":
       return {
@@ -113,7 +110,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         gameGridCells: state.gameGridCells.map((gameGridCell) =>
           action.payload.has(gameGridCell.id)
-            ? { ...gameGridCell, value: getRandomGameGridCellValue() }
+            ? {
+                ...gameGridCell,
+                value: getRandomGameGridCellValue(state.gameGridCells),
+              }
             : gameGridCell
         ),
         score: state.score + action.payload.size,
