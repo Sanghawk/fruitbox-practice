@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Tenzy",
-  description: "TODO: add tenzy description",
+  title: "while in queue | Tenzy",
+  description:
+    "Tenzy is a game where you have select numbers on a grid that sum to ten!",
 };
 
 export default function TenzyLayout({

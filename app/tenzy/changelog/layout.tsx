@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "while in queue | Tenzy Changelog",
+  description: "Changelog for Tenzy",
+};
+
 export default function ChangelogLayout({
   children,
 }: {

@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "While You Wait",
+  title: "while in queue",
   description: "Quick games to pass the time",
 };
 
@@ -58,10 +58,14 @@ function Header() {
         headerStyles.bgAndText
       )}
     >
-      <div className="flex items-center h-full mx-4">
-        <h1 className="text-2xl font-mono font-bold">
-          <Link href="/">w(q)</Link>
-        </h1>
+      <div className="relative mx-auto max-w-screen-lg h-full">
+        <div className="flex items-center h-full mx-4">
+          <h1 className="text-2xl font-mono font-bold ">
+            <Link className="px-2 py-1" href="/">
+              w(q)
+            </Link>
+          </h1>
+        </div>
       </div>
     </header>
   );
