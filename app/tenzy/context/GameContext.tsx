@@ -16,6 +16,8 @@ import {
 
 import { GameLifeCycle } from "../types";
 import { GAME_DURATION } from "../constants/config";
+import { useCorrectSfx } from "../hooks/useSfx";
+
 // Define the structure of the dashboard state
 interface GameState {
   score: number;
@@ -136,6 +138,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 export function GameProvider({ children }: { children: ReactNode }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const playSfx = useCorrectSfx();
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
     gameContainerRef,
@@ -272,6 +275,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     );
 
     if (sum === 10) {
+      playSfx();
       dispatch({
         type: "CONSUME_GAME_GRID_CELLS",
         payload: state.userSelectedGameGridCells,

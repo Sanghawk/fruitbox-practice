@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import clsx from "clsx";
 import "./globals.css";
-
+import ReactDOM from "react-dom";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -20,6 +20,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  ReactDOM.preload("/sounds/consume_pop.m4a", {
+    as: "audio",
+    type: "audio/mpeg",
+  });
+
   return (
     <html lang="en" className={inter.className}>
       <body className={`antialiased`}>
