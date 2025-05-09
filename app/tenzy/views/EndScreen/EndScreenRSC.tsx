@@ -5,6 +5,9 @@ import FinalScoreMessageRCC from "./FinalScoreMessageRCC";
 import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EndScreenRSC() {
   const topScores = await prisma.score.findMany({
     orderBy: [{ value: "desc" }, { createdAt: "desc" }],
