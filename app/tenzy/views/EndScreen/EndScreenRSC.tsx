@@ -3,12 +3,14 @@ import CtxConditionalRenderEndScreen from "./CtxConditionalRenderEndScreen";
 import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
 import FinalScoreMessageRCC from "./FinalScoreMessageRCC";
 import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
-import { API_BASE_URL } from "@/app/tenzy/constants/config";
+import prisma from "@/lib/prisma";
 
 export default async function EndScreenRSC() {
-  const topScores = await fetch(`${API_BASE_URL}/api/score?limit=3`).then(
-    (res) => res.json()
-  );
+  const topScores = await prisma.score.findMany({
+    orderBy: [{ value: "desc" }, { createdAt: "desc" }],
+    take: 3,
+    include: { user: true },
+  });
   return (
     <CtxConditionalRenderEndScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
