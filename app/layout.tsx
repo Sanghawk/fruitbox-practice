@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import clsx from "clsx";
 import "./globals.css";
 import ReactDOM from "react-dom";
+import Link from "next/link";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -58,7 +59,9 @@ function Header() {
       )}
     >
       <div className="flex items-center h-full mx-4">
-        <h1 className="text-2xl font-mono font-bold">while you wait</h1>
+        <h1 className="text-2xl font-mono font-bold">
+          <Link href="/">w(q)</Link>
+        </h1>
       </div>
     </header>
   );
