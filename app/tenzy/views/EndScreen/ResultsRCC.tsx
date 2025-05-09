@@ -1,7 +1,6 @@
 "use client";
-import StartButton from "@/components/StartButton";
-import { SubmitScoreForm } from "@/components/SubmitScoreForm";
-import { useGameContext } from "@/context/GameContext";
+import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
+import { useGameContext } from "@/app/tenzy/context/GameContext";
 import { useState, useEffect } from "react";
 
 interface Score {
@@ -11,29 +10,7 @@ interface Score {
     name: string;
   };
 }
-
-export default function EndScreen() {
-  return (
-    <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
-      <div className="h-[calc(100dvh-64px)]">
-        <div className="h-full mx-4 flex flex-col justify-center gap-4">
-          <div>
-            <div className="text-center mb-4">
-              <h2 className="text-4xl font-bold">Game Over</h2>
-            </div>
-            <Results />
-          </div>
-
-          <div>
-            <StartButton />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Results() {
+export default function ResultsRCC() {
   const { score } = useGameContext();
   const [scores, setScores] = useState<Score[]>([]);
 

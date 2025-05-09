@@ -8,14 +8,14 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { GameGridCell, GameGridCellId, Point, Rect } from "@/types";
+import { GameGridCell, GameGridCellId, Point, Rect } from "../types";
 import {
   generateGameGridCells,
   getRandomGameGridCellValue,
-} from "@/utils/gameHelpers";
+} from "../utils/gameHelpers";
 
-import { GameLifeCycle } from "@/types";
-import { GAME_DURATION } from "@/constants/config";
+import { GameLifeCycle } from "../types";
+import { GAME_DURATION } from "../constants/config";
 // Define the structure of the dashboard state
 interface GameState {
   score: number;

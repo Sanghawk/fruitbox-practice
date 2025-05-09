@@ -1,5 +1,5 @@
-import { GameGridCell as GameGridCellType } from "@/types";
-import { CELL_SIZE } from "@/constants/config";
+import { GameGridCell as GameGridCellType } from "@/app/tenzy/types";
+import { CELL_SIZE } from "@/app/tenzy/constants/config";
 import clsx from "clsx";
 
 export default function GameGridCell({
