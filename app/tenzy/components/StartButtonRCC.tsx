@@ -1,9 +1,9 @@
 "use client";
 
-import { useGameContext } from "@/context/GameContext";
+import { useGameContext } from "@/app/tenzy/context/GameContext";
 
 // TODO: Should be able to start game with keyboard macro
-export default function StartButton() {
+export default function StartButtonRCC() {
   const { handleGameStart } = useGameContext();
 
   return (

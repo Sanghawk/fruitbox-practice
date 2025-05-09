@@ -1,5 +1,5 @@
-import { BOARD_ROWS, BOARD_COLS } from "@/constants/config";
-import { GameGridCell } from "@/types";
+import { BOARD_ROWS, BOARD_COLS } from "../constants/config";
+import { GameGridCell } from "../types";
 
 /**
  * Generate an initial array of GameGridCell objects.
@@ -18,4 +18,3 @@ export function generateGameGridCells(): GameGridCell[] {
 export function getRandomGameGridCellValue(): number {
   return Math.floor(Math.random() * 9) + 1;
 }
-

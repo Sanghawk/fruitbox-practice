@@ -1,8 +1,8 @@
 "use client";
 
-import { useGameContext } from "@/context/GameContext";
+import { useGameContext } from "@/app/tenzy/context/GameContext";
 
-export default function ResetButton() {
+export default function ResetButtonRCC() {
   const { handleGameReset } = useGameContext();
 
   return (

@@ -8,14 +8,16 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { GameGridCell, GameGridCellId, Point, Rect } from "@/types";
+import { GameGridCell, GameGridCellId, Point, Rect } from "../types";
 import {
   generateGameGridCells,
   getRandomGameGridCellValue,
-} from "@/utils/gameHelpers";
+} from "../utils/gameHelpers";
 
-import { GameLifeCycle } from "@/types";
-import { GAME_DURATION } from "@/constants/config";
+import { GameLifeCycle } from "../types";
+import { GAME_DURATION } from "../constants/config";
+import { useSfx } from "../hooks/useSfx";
+
 // Define the structure of the dashboard state
 interface GameState {
   score: number;
@@ -136,6 +138,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 export function GameProvider({ children }: { children: ReactNode }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const playSfx = useSfx();
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
     gameContainerRef,
@@ -272,6 +275,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     );
 
     if (sum === 10) {
+      playSfx();
       dispatch({
         type: "CONSUME_GAME_GRID_CELLS",
         payload: state.userSelectedGameGridCells,
