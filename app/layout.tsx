@@ -59,6 +59,7 @@ export default function RootLayout({
         <SpeedInsights />
         <Analytics />
         <Script
+          id="ld-json-root"
           type="application/ld+json"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

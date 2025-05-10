@@ -42,6 +42,7 @@ export default function TenzyLayout({
   return (
     <TenzyContainer>
       <Script
+        id="ld-json-tenzy"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
