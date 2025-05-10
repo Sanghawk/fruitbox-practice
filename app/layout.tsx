@@ -73,11 +73,9 @@ function Header() {
     >
       <div className="relative mx-auto max-w-screen-lg h-full">
         <div className="flex items-center h-full mx-4">
-          <h1 className="text-2xl font-mono font-bold ">
-            <Link className="px-2 py-1" href="/">
-              w(q)
-            </Link>
-          </h1>
+          <Link className="btn btn-md font-bold text-mono text-xl" href="/">
+            w(q)
+          </Link>
         </div>
       </div>
     </header>

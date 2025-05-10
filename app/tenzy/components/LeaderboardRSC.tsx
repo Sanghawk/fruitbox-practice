@@ -6,7 +6,7 @@ export const revalidate = 60; // invalidate every min
 export default async function LeaderboardRSC({ scores }: { scores: Score[] }) {
   return (
     <div className="">
-      <h3 className="text-2xl mb-4 font-bold">Tenzy Leaderboard</h3>
+      <h1 className="text-2xl mb-4 font-bold">Tenzy Leaderboard</h1>
       <ol className="pl-0 flex flex-col gap-2">
         {scores.map((s, i) => (
           <li

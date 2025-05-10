@@ -10,7 +10,7 @@ export default function StartScreenRSC() {
           <div className="h-full mx-4 flex flex-col justify-center gap-4">
             <div>
               <div className="text-center mb-4">
-                <h2 className="text-4xl font-bold">Tenzy</h2>
+                <h1 className="text-4xl font-bold">Tenzy</h1>
               </div>
               <Instructions />
             </div>
