@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.whileinqueue.io/tenzy/changelog"),
+  metadataBase: new URL("https://www.whileinqueue.io"),
   title: "Tenzy Changelog",
   description: "Changelog for Tenzy",
   openGraph: {
     title: "Tenzy Changelog",
     description: "Changelog for Tenzy",
-    url: "[https://www.whileinqueue.io/tenzy/changelog](https://www.whileinqueue.io/tenzy/changelog)",
+    url: "/tenzy/changelog",
     siteName: "Tenzy Changelog",
     images: ["/og-image.png"],
   },

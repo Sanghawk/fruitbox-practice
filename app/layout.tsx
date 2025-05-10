@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "While in Queue",
     description: "Quick games to play while you are waiting in queue.",
-    url: "[https://www.whileinqueue.io](https://www.whileinqueue.io/)",
+    url: "/",
     siteName: "While in Queue",
     images: ["/og-image.png"],
   },

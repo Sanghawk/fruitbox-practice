@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.whileinqueue.io/tenzy/leaderboard"),
+  metadataBase: new URL("https://www.whileinqueue.io"),
   title: "Tenzy Leaderboard",
   description: "Leaderboard for Tenzy",
   openGraph: {
     title: "Tenzy Leaderboard",
     description: "Leaderboard for Tenzy",
-    url: "[https://www.whileinqueue.io/tenzy/leaderboard](https://www.whileinqueue.io/tenzy/leaderboard)",
+    url: "/tenzy/leaderboard",
     siteName: "Tenzy Leaderboard",
     images: ["/og-image.png"],
   },

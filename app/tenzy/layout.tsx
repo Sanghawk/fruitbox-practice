@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.whileinqueue.io/tenzy"),
+  metadataBase: new URL("https://www.whileinqueue.io"),
   title: "Tenzy",
   description:
     "Tenzy is a game where you have select numbers on a grid that sum to ten!",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Tenzy",
     description:
       "Tenzy is a game where you have select numbers on a grid that sum to ten!",
-    url: "[https://www.whileinqueue.io/tenzy](https://www.whileinqueue.io/tenzy)",
+    url: "/tenzy",
     siteName: "Tenzy",
     images: ["/og-image.png"],
   },
