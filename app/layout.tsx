@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.whileinqueue.io"),
   title: { default: "While in Queue", template: "%s | While in Queue" },
   description: "Quick games to play while you are waiting in queue.",
-  alternates: { canonical: "./" },
   openGraph: {
     title: "While in Queue",
     description: "Quick games to play while you are waiting in queue.",
