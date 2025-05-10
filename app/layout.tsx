@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import clsx from "clsx";
 import "./globals.css";
 import ReactDOM from "react-dom";
@@ -48,6 +49,7 @@ export default function RootLayout({
         </main>
         <SpeedInsights />
         <Analytics />
+        <GoogleAnalytics gaId="G-Y4FG6PP673" />
       </body>
     </html>
   );

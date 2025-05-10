@@ -17,6 +17,7 @@ import {
 import { GameLifeCycle } from "../types";
 import { GAME_DURATION } from "../constants/config";
 import { useSfx } from "../hooks/useSfx";
+import { sendGAEvent } from "@next/third-parties/google";
 
 // Define the structure of the dashboard state
 interface GameState {
@@ -166,10 +167,16 @@ export function GameProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (state.timeLeft === 0) {
       dispatch({ type: "END_GAME" });
+      sendGAEvent("event", "tenzy_game_end", {
+        date: new Date().toISOString(),
+      });
     }
   }, [state.timeLeft]);
 
   function handleGameStart() {
+    sendGAEvent("event", "tenzy_game_start", {
+      date: new Date().toISOString(),
+    });
     clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "START_GAME",
@@ -180,6 +187,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     startTimer();
   }
   function handleGameReset() {
+    sendGAEvent("event", "tenzy_game_reset", {
+      date: new Date().toISOString(),
+    });
     clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "RESET_GAME",
@@ -279,6 +289,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({
         type: "CONSUME_GAME_GRID_CELLS",
         payload: state.userSelectedGameGridCells,
+      });
+      sendGAEvent("event", "tenzy_game_consume", {
+        date: new Date().toISOString(),
+        grid_cells: Array.from(state.userSelectedGameGridCells),
       });
     }
 
