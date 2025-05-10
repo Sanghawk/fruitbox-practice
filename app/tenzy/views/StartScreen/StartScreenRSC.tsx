@@ -31,7 +31,7 @@ function Instructions() {
       <h3>How to play</h3>
       <TenzyDescription />
       <p>
-        View updates to the game <Link href="/tenzy/changelog">here</Link>
+        View updates to the game: <Link href="/tenzy/changelog">Changelog</Link>
       </p>
       <p>Good luck!</p>
     </div>
