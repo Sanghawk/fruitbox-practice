@@ -6,4 +6,7 @@ export const BOARD_COLS = 8;
 export const CELL_SIZE = 44;
 /** Duration (s) of each game session */
 
-export const GAME_DURATION = 90;
+export const GAME_DURATION =
+  process.env.NODE_ENV === "production"
+    ? 90 // Production: 90 seconds
+    : 1000; // Development: 30 seconds
