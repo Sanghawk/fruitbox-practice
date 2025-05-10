@@ -2,9 +2,25 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "while in queue | Tenzy",
+  metadataBase: new URL("https://www.whileinqueue.io"),
+  title: "Tenzy",
   description:
     "Tenzy is a game where you have select numbers on a grid that sum to ten!",
+  openGraph: {
+    title: "Tenzy",
+    description:
+      "Tenzy is a game where you have select numbers on a grid that sum to ten!",
+    url: "/tenzy",
+    siteName: "Tenzy",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tenzy",
+    description:
+      "Tenzy is a game where you have select numbers on a grid that sum to ten!",
+    images: ["/twitter-image.png"],
+  },
 };
 
 export default function TenzyLayout({

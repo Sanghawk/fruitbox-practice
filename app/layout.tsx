@@ -6,14 +6,29 @@ import clsx from "clsx";
 import "./globals.css";
 import ReactDOM from "react-dom";
 import Link from "next/link";
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "while in queue",
-  description: "Quick games to pass the time",
+  metadataBase: new URL("https://www.whileinqueue.io"),
+  title: { default: "While in Queue", template: "%s | While in Queue" },
+  description: "Quick games to play while you are waiting in queue.",
+  openGraph: {
+    title: "While in Queue",
+    description: "Quick games to play while you are waiting in queue.",
+    url: "/",
+    siteName: "While in Queue",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "While in Queue",
+    description: "Quick games to play while you are waiting in queue.",
+    images: ["/twitter-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -29,11 +44,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body className={`antialiased`}>
-        <SpeedInsights />
         <main>
           <Header />
           {children}
         </main>
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>
