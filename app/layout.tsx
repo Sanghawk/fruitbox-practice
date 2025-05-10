@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import clsx from "clsx";
 import "./globals.css";
 import ReactDOM from "react-dom";
@@ -48,6 +49,7 @@ export default function RootLayout({
         </main>
         <SpeedInsights />
         <Analytics />
+        <GoogleAnalytics gaId="G-Y4FG6PP673" />
       </body>
     </html>
   );
@@ -73,11 +75,9 @@ function Header() {
     >
       <div className="relative mx-auto max-w-screen-lg h-full">
         <div className="flex items-center h-full mx-4">
-          <h1 className="text-2xl font-mono font-bold ">
-            <Link className="px-2 py-1" href="/">
-              w(q)
-            </Link>
-          </h1>
+          <Link className="btn btn-md font-bold text-mono text-xl" href="/">
+            w(q)
+          </Link>
         </div>
       </div>
     </header>
