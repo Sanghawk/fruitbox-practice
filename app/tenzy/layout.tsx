@@ -12,14 +12,12 @@ export const metadata: Metadata = {
       "Tenzy is a game where you have select numbers on a grid that sum to ten!",
     url: "/tenzy",
     siteName: "Tenzy",
-    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tenzy",
     description:
       "Tenzy is a game where you have select numbers on a grid that sum to ten!",
-    images: ["/twitter-image.png"],
   },
 };
 
