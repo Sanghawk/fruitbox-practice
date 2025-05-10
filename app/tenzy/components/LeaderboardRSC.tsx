@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import { Score } from "@/app/tenzy/types";
 
-export const revalidate = 60; // invalidate every min
-
 export default async function LeaderboardRSC({ scores }: { scores: Score[] }) {
   return (
     <div className="">

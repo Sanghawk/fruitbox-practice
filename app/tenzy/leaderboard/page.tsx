@@ -1,7 +1,7 @@
 import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
 import prisma from "@/lib/prisma";
 
-export const revalidate = 0; // invalidate every min
+export const revalidate = 0;
 export default async function TenzyLeaderboard() {
   const jsonLd = {
     "@context": "https://schema.org",
