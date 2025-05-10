@@ -34,7 +34,6 @@ export default function LeaderboardLayout({
   return (
     <div className="">
       <Script
-        id="ld-json"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
