@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.whileinqueue.io/tenzy/leaderboard"),
@@ -23,5 +24,22 @@ export default function LeaderboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="">{children}</div>;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Leaderboard",
+    name: "Tenzy Leaderboard",
+    url: "https://www.whileinqueue.io/tenzy/leaderboard",
+    description: "Leaderboard for Tenzy",
+  };
+  return (
+    <div className="">
+      <Script
+        id="ld-json"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {children}
+    </div>
+  );
 }

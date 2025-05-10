@@ -6,6 +6,8 @@ import clsx from "clsx";
 import "./globals.css";
 import ReactDOM from "react-dom";
 import Link from "next/link";
+import Script from "next/script";
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -39,16 +41,29 @@ export default function RootLayout({
     as: "audio",
     type: "audio/mpeg",
   });
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "While in Queue",
+    url: "https://www.whileinqueue.io",
+    description: "Quick games to play while you are waiting in queue.",
+  };
 
   return (
     <html lang="en" className={inter.className}>
       <body className={`antialiased`}>
-        <SpeedInsights />
         <main>
           <Header />
           {children}
         </main>
+        <SpeedInsights />
         <Analytics />
+        <Script
+          id="ld-json"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </body>
     </html>
   );

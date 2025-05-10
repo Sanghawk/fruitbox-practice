@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import Script from "next/script";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.whileinqueue.io/tenzy/changelog"),
   title: "Tenzy Changelog",
@@ -24,5 +24,22 @@ export default function ChangelogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="prose dark:prose-invert p-4">{children}</div>;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Changelog",
+    name: "Tenzy Changelog",
+    url: "https://www.whileinqueue.io/tenzy/changelog",
+    description: "Changelog for Tenzy",
+  };
+  return (
+    <div className="prose dark:prose-invert p-4">
+      <Script
+        id="ld-json"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {children}
+    </div>
+  );
 }
