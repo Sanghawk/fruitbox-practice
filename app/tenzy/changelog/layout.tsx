@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.whileinqueue.io/tenzy/changelog"),
   title: "Tenzy Changelog",
@@ -24,6 +23,9 @@ export default function ChangelogLayout({
 }: {
   children: React.ReactNode;
 }) {
+  /**
+   * NOTE: JSON-LD will not work properly if you expand routes beyond /tenzy/changelogs
+   */
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Changelog",
@@ -33,10 +35,8 @@ export default function ChangelogLayout({
   };
   return (
     <div className="prose dark:prose-invert p-4">
-      <Script
-        id="ld-json-changelog"
+      <script
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {children}

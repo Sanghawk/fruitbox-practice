@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -29,27 +28,7 @@ export default function TenzyLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Game",
-    name: "Tenzy",
-    url: "https://www.whileinqueue.io/tenzy",
-    description:
-      "Tenzy is a game where you have select numbers on a grid that sum to ten!",
-    gamePlatform: "Web",
-    gameLocation: "https://www.whileinqueue.io/tenzy",
-  };
-  return (
-    <TenzyContainer>
-      <Script
-        id="ld-json-tenzy"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {children}
-    </TenzyContainer>
-  );
+  return <TenzyContainer>{children}</TenzyContainer>;
 }
 
 function TenzyContainer({ children }: { children: ReactNode }) {
