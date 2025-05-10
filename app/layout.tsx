@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import clsx from "clsx";
 import "./globals.css";
-import ReactDOM from "react-dom";
 import Link from "next/link";
 
 const inter = Inter({
@@ -35,11 +34,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  ReactDOM.preload("/sounds/consume_pop.m4a", {
-    as: "audio",
-    type: "audio/mpeg",
-  });
-
   return (
     <html lang="en" className={inter.className}>
       <body className={`antialiased`}>

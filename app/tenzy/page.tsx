@@ -1,7 +1,6 @@
 import { GameProvider } from "./context/GameContext";
 import RootGameEntry from "./RootGameEntry";
 
-export const revalidate = 0;
 export default function Tenzy() {
   const jsonLd = {
     "@context": "https://schema.org",

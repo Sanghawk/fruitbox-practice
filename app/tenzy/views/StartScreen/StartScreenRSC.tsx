@@ -55,7 +55,7 @@ export function TenzyGameCard() {
         <div className="text-left mb-4">
           <h2 className="text-4xl font-bold">Tenzy</h2>
         </div>
-        <div className="text-sm">
+        <div className="text-sm mb-4">
           <TenzyDescription />
         </div>
         <div></div>
