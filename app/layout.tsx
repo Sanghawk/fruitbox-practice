@@ -21,13 +21,11 @@ export const metadata: Metadata = {
     description: "Quick games to play while you are waiting in queue.",
     url: "/",
     siteName: "While in Queue",
-    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "While in Queue",
     description: "Quick games to play while you are waiting in queue.",
-    images: ["/twitter-image.png"],
   },
 };
 

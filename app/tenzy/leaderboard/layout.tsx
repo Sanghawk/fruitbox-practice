@@ -9,13 +9,11 @@ export const metadata: Metadata = {
     description: "Leaderboard for Tenzy",
     url: "/tenzy/leaderboard",
     siteName: "Tenzy Leaderboard",
-    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tenzy Leaderboard",
     description: "Leaderboard for Tenzy",
-    images: ["/twitter-image.png"],
   },
 };
 export default function LeaderboardLayout({

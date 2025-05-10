@@ -8,13 +8,11 @@ export const metadata: Metadata = {
     description: "Changelog for Tenzy",
     url: "/tenzy/changelog",
     siteName: "Tenzy Changelog",
-    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tenzy Changelog",
     description: "Changelog for Tenzy",
-    images: ["/twitter-image.png"],
   },
 };
 
