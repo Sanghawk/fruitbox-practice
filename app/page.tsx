@@ -1,4 +1,4 @@
-import { TenzyGameCard } from "@/app/tenzy/views/StartScreen/StartScreenRSC";
+import { TenzyGameCard } from "@/app/tenzy/views/StartScreen";
 export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",

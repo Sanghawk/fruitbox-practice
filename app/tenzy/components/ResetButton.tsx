@@ -2,7 +2,7 @@
 
 import { useGameContext } from "@/app/tenzy/context/GameContext";
 
-export default function ResetButtonRCC() {
+export default function ResetButton() {
   const { handleGameReset } = useGameContext();
 
   return (

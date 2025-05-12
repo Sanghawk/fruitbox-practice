@@ -1,4 +1,4 @@
-import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
+import Leaderboard from "@/app/tenzy/components/Leaderboard";
 import prisma from "@/lib/prisma";
 
 export const revalidate = 0;
@@ -21,7 +21,7 @@ export default async function TenzyLeaderboard() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <LeaderboardRSC scores={scores} />
+      <Leaderboard scores={scores} />
     </div>
   );
 }

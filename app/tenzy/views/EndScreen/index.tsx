@@ -1,1 +1,1 @@
-export { default } from "./EndScreenRSC";
+export { default } from "./EndScreen";

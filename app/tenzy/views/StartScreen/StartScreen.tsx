@@ -1,8 +1,8 @@
-import StartButton from "@/app/tenzy/components/StartButtonRCC";
+import StartButton from "@/app/tenzy/components/StartButton";
 import CtxConditionalRenderStartScreen from "./CtxConditionalRenderStartScreen";
 import Link from "next/link";
 
-export default function StartScreenRSC() {
+export default function StartScreen() {
   return (
     <CtxConditionalRenderStartScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)]">

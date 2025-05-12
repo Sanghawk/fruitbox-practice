@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Score } from "@/app/tenzy/types";
 
-export default async function LeaderboardRSC({ scores }: { scores: Score[] }) {
+export default async function Leaderboard({ scores }: { scores: Score[] }) {
   return (
     <div className="">
       <h1 className="text-2xl mb-4 font-bold">Tenzy Leaderboard</h1>

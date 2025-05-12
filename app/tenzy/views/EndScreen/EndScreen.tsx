@@ -1,8 +1,8 @@
-import StartButtonRCC from "@/app/tenzy/components/StartButtonRCC";
+import StartButton from "@/app/tenzy/components/StartButton";
 import CtxConditionalRenderEndScreen from "./CtxConditionalRenderEndScreen";
 import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
-import FinalScoreMessageRCC from "./FinalScoreMessageRCC";
-import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
+import FinalScoreMessage from "./FinalScoreMessage";
+import Leaderboard from "@/app/tenzy/components/Leaderboard";
 import prisma from "@/lib/prisma";
 import { unstable_cache } from "next/cache";
 
@@ -20,7 +20,7 @@ const getScores = unstable_cache(
     tags: ["tenzy_leaderboard_scores"],
   }
 );
-export default async function EndScreenRSC() {
+export default async function EndScreen() {
   const topScores = await getScores();
   return (
     <CtxConditionalRenderEndScreen>
@@ -32,7 +32,7 @@ export default async function EndScreenRSC() {
                 <h2 className="text-4xl font-bold">Game Over</h2>
               </div>
               <div className="flex flex-col gap-4">
-                <FinalScoreMessageRCC />
+                <FinalScoreMessage />
                 <div className="flex flex-col gap-2">
                   <p>Submit your score on the leaderboard:</p>
                   <SubmitScoreForm />
@@ -40,12 +40,12 @@ export default async function EndScreenRSC() {
               </div>
 
               <div className="mt-4">
-                <LeaderboardRSC scores={topScores} />
+                <Leaderboard scores={topScores} />
               </div>
             </div>
 
             <div>
-              <StartButtonRCC text="Play again" />
+              <StartButton text="Play again" />
             </div>
           </div>
         </div>

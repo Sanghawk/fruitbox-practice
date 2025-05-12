@@ -1,10 +1,10 @@
-import ResetButtonRCC from "@/app/tenzy/components/ResetButtonRCC";
+import ResetButton from "@/app/tenzy/components/ResetButton";
 import CtxConditionalRenderActiveScreen from "./CtxConditionalRenderActiveScreen";
 import { BOARD_COLS, CELL_SIZE } from "@/app/tenzy/constants/config";
-import TimeLeftRCC from "@/app/tenzy/components/TimeLeftRCC";
-import GameScoreRCC from "@/app/tenzy/components/GameScoreRCC";
-import GameGridRCC from "@/app/tenzy/components/GameGridRCC";
-export default function ActiveScreenRSC() {
+import TimeLeft from "@/app/tenzy/components/TimeLeft";
+import GameScore from "@/app/tenzy/components/GameScore";
+import GameGrid from "@/app/tenzy/components/GameGrid";
+export default function ActiveScreen() {
   return (
     <CtxConditionalRenderActiveScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)] ">
@@ -13,18 +13,18 @@ export default function ActiveScreenRSC() {
             className="mx-auto"
             style={{ width: `${BOARD_COLS * CELL_SIZE}px` }}
           >
-            <ResetButtonRCC />
+            <ResetButton />
           </div>
-          <GameGridRCC />
+          <GameGrid />
           <div
             className="mx-auto"
             style={{ width: `${BOARD_COLS * CELL_SIZE}px` }}
           >
             <div className="flex flex-row justify-between">
               <div>
-                <GameScoreRCC />
+                <GameScore />
               </div>
-              <TimeLeftRCC />
+              <TimeLeft />
             </div>
           </div>
         </div>

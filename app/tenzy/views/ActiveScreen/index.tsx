@@ -1,1 +1,1 @@
-export { default } from "./ActiveScreenRSC";
+export { default } from "./ActiveScreen";

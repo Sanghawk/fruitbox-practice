@@ -5,11 +5,11 @@ import {
   CELL_SIZE,
 } from "@/app/tenzy/constants/config";
 import { useGameContext } from "@/app/tenzy/context/GameContext";
-import GameGridCell from "@/app/tenzy/components/GameGridCellRSC";
+import GameGridCell from "@/app/tenzy/components/GameGridCell";
 import { GameGridCell as GameGridCellType } from "@/app/tenzy/types";
 import clsx from "clsx";
 
-export default function GameGridRCC() {
+export default function GameGrid() {
   const {
     gameGridCells,
     gameContainerRef,
