@@ -1,6 +1,6 @@
 "use client";
 
-import { useGameContext } from "@/app/tenzy/context/GameContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function TimeLeft() {
   const { timeLeft } = useGameContext();

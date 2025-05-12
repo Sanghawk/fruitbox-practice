@@ -6,7 +6,7 @@ import {
   useReducer,
   ReactNode,
   useRef,
-  useEffect,
+  // useEffect,
 } from "react";
 import { GameGridCell, GameGridCellId, Point, Rect } from "../types";
 import {
@@ -15,11 +15,11 @@ import {
 } from "../utils/gameHelpers";
 
 import { GameLifeCycle } from "../types";
-import { GAME_DURATION } from "../constants/config";
 import { useSfx } from "../hooks/useSfx";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useGameTimer } from "../hooks/useGameTimer";
+import { GAME_DURATION } from "../constants/config";
 
-// Define the structure of the dashboard state
 interface GameState {
   score: number;
   gameGridCells: GameGridCell[];
@@ -28,7 +28,6 @@ interface GameState {
   userSelectBoxRect: Rect | null;
   userSelectedGameGridCells: Set<GameGridCellId>;
   gameStatus: GameLifeCycle;
-  intervalRef: React.RefObject<NodeJS.Timeout | null>;
   timeLeft: number;
 }
 
@@ -46,7 +45,7 @@ interface GameContextType extends GameState {
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 // Define the initial state of the dashboard
-const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
+const initialState: Omit<GameState, "gameContainerRef"> = {
   score: 0,
   gameGridCells: [],
   userSelectBoxOrigin: null,
@@ -66,7 +65,6 @@ type GameAction =
   | { type: "RESET_SELECTION" }
   | { type: "START_GAME"; payload: { gameGridCells: GameGridCell[] } }
   | { type: "RESET_GAME"; payload: { gameGridCells: GameGridCell[] } }
-  | { type: "UPDATE_TIME"; payload: number }
   | { type: "END_GAME" };
 
 /**
@@ -80,18 +78,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        intervalRef: state.intervalRef,
         gameGridCells: action.payload.gameGridCells,
-        timeLeft: GAME_DURATION,
       };
     case "RESET_GAME":
       return {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        intervalRef: state.intervalRef,
         gameGridCells: action.payload.gameGridCells,
-        timeLeft: GAME_DURATION,
       };
     case "END_GAME":
       return {
@@ -126,8 +120,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         userSelectBoxOrigin: null,
         userSelectBoxRect: null,
       };
-    case "UPDATE_TIME":
-      return { ...state, timeLeft: action.payload };
     default:
       return state;
   }
@@ -138,46 +130,32 @@ function gameReducer(state: GameState, action: GameAction): GameState {
  */
 export function GameProvider({ children }: { children: ReactNode }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const {
+    timeLeft,
+    start: startTimer,
+    reset: resetTimer,
+  } = useGameTimer({
+    duration: GAME_DURATION,
+    onExpire: handleGameEnd,
+    autoStart: false,
+  });
   const playSfx = useSfx();
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
     gameContainerRef,
-    intervalRef,
   });
 
-  function startTimer() {
-    let t = GAME_DURATION;
-    intervalRef.current = setInterval(() => {
-      t = t - 1;
-      dispatch({
-        type: "UPDATE_TIME",
-        payload: t <= 1 ? 0 : t,
-      });
-
-      if (t <= 1) {
-        clearInterval(intervalRef.current as NodeJS.Timeout);
-      }
-    }, 1000);
-
-    /* --- cleanup on unmount OR when `running` toggles off --- */
-    return () => clearInterval(intervalRef.current as NodeJS.Timeout);
+  function handleGameEnd() {
+    dispatch({ type: "END_GAME" });
+    sendGAEvent("event", "tenzy_game_end", {
+      date: new Date().toISOString(),
+    });
   }
-
-  useEffect(() => {
-    if (state.timeLeft === 0) {
-      dispatch({ type: "END_GAME" });
-      sendGAEvent("event", "tenzy_game_end", {
-        date: new Date().toISOString(),
-      });
-    }
-  }, [state.timeLeft]);
 
   function handleGameStart() {
     sendGAEvent("event", "tenzy_game_start", {
       date: new Date().toISOString(),
     });
-    clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "START_GAME",
       payload: {
@@ -190,14 +168,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     sendGAEvent("event", "tenzy_game_reset", {
       date: new Date().toISOString(),
     });
-    clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "RESET_GAME",
       payload: {
         gameGridCells: generateGameGridCells(),
       },
     });
-    startTimer();
+    resetTimer();
   }
 
   function handlePointerLeave() {
@@ -303,6 +280,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     <GameContext.Provider
       value={{
         ...state,
+        timeLeft,
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,
