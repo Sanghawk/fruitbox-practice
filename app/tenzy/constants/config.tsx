@@ -9,4 +9,9 @@ export const CELL_SIZE = 44;
 export const GAME_DURATION =
   process.env.NODE_ENV === "production"
     ? 90 // Production: 90 seconds
-    : 4; // Development: 30 seconds
+    : 90; // Development: 30 seconds
+
+export const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://www.whileinqueue.io"
+    : "http://localhost:3000";
