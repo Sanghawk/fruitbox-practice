@@ -4,13 +4,24 @@ import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
 import FinalScoreMessageRCC from "./FinalScoreMessageRCC";
 import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
+const getScores = unstable_cache(
+  async () => {
+    return await prisma.score.findMany({
+      orderBy: [{ value: "desc" }, { createdAt: "desc" }],
+      take: 3,
+      include: { user: true },
+    });
+  },
+  ["tenzy_leaderboard_scores"],
+  {
+    revalidate: 3600,
+    tags: ["tenzy_leaderboard_scores"],
+  }
+);
 export default async function EndScreenRSC() {
-  const topScores = await prisma.score.findMany({
-    orderBy: [{ value: "desc" }, { createdAt: "desc" }],
-    take: 3,
-    include: { user: true },
-  });
+  const topScores = await getScores();
   return (
     <CtxConditionalRenderEndScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
