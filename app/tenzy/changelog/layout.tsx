@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.whileinqueue.io"),
   title: "Tenzy Changelog",
@@ -37,7 +38,7 @@ export default function ChangelogLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {children}
+      <Suspense fallback={null}>{children}</Suspense>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Leaderboard from "@/app/tenzy/components/Leaderboard";
 import { API_BASE_URL } from "../constants/config";
+import { Suspense } from "react";
 
 export default async function TenzyLeaderboard() {
   const res = await fetch(`${API_BASE_URL}/api/score`, {
@@ -20,7 +21,9 @@ export default async function TenzyLeaderboard() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Leaderboard scores={scores} />
+      <Suspense fallback={null}>
+        <Leaderboard scores={scores} />
+      </Suspense>
     </div>
   );
 }
