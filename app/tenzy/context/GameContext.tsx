@@ -15,12 +15,12 @@ import {
 } from "../utils/gameHelpers";
 
 import { GameLifeCycle } from "../types";
-import { GAME_DURATION } from "../constants/config";
 import { useSfx } from "../hooks/useSfx";
 import { sendGAEvent } from "@next/third-parties/google";
+import { GAME_DURATION } from "../constants/config";
+import { useDragSelect } from "../hooks/useDragSelect";
 
-// Define the structure of the dashboard state
-interface GameState {
+export interface GameState {
   score: number;
   gameGridCells: GameGridCell[];
   gameContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -28,8 +28,8 @@ interface GameState {
   userSelectBoxRect: Rect | null;
   userSelectedGameGridCells: Set<GameGridCellId>;
   gameStatus: GameLifeCycle;
-  intervalRef: React.RefObject<NodeJS.Timeout | null>;
   timeLeft: number;
+  running: boolean;
 }
 
 // Extend the state interface to include actions
@@ -38,6 +38,7 @@ interface GameContextType extends GameState {
   handlePointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
   handlePointerUp: () => void;
   handlePointerLeave: () => void;
+  handlePointerCancel: () => void;
   handleGameStart: () => void;
   handleGameReset: () => void;
 }
@@ -46,7 +47,7 @@ interface GameContextType extends GameState {
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 // Define the initial state of the dashboard
-const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
+const initialState: Omit<GameState, "gameContainerRef"> = {
   score: 0,
   gameGridCells: [],
   userSelectBoxOrigin: null,
@@ -54,9 +55,10 @@ const initialState: Omit<GameState, "gameContainerRef" | "intervalRef"> = {
   userSelectedGameGridCells: new Set(),
   gameStatus: GameLifeCycle.WAITING_USER_START,
   timeLeft: GAME_DURATION,
+  running: false,
 };
 
-type GameAction =
+export type GameAction =
   | {
       type: "SET_SELECTION_BOX";
       payload: { origin: Point | null; rect: Rect | null };
@@ -66,8 +68,8 @@ type GameAction =
   | { type: "RESET_SELECTION" }
   | { type: "START_GAME"; payload: { gameGridCells: GameGridCell[] } }
   | { type: "RESET_GAME"; payload: { gameGridCells: GameGridCell[] } }
-  | { type: "UPDATE_TIME"; payload: number }
-  | { type: "END_GAME" };
+  | { type: "END_GAME" }
+  | { type: "TICK" };
 
 /**
  * Reducer function for managing state updates.
@@ -80,23 +82,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        intervalRef: state.intervalRef,
         gameGridCells: action.payload.gameGridCells,
-        timeLeft: GAME_DURATION,
+        running: true,
       };
     case "RESET_GAME":
       return {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        intervalRef: state.intervalRef,
         gameGridCells: action.payload.gameGridCells,
-        timeLeft: GAME_DURATION,
+        running: true,
       };
     case "END_GAME":
       return {
         ...state,
         gameStatus: GameLifeCycle.GAME_OVER,
+        running: false,
       };
     case "SET_SELECTION_BOX":
       return {
@@ -119,6 +120,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ),
         score: state.score + action.payload.size,
       };
+    case "TICK":
+      return {
+        ...state,
+        timeLeft: state.timeLeft > 0 ? state.timeLeft - 1 : 0,
+      };
     case "RESET_SELECTION":
       return {
         ...state,
@@ -126,8 +132,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         userSelectBoxOrigin: null,
         userSelectBoxRect: null,
       };
-    case "UPDATE_TIME":
-      return { ...state, timeLeft: action.payload };
     default:
       return state;
   }
@@ -138,165 +142,64 @@ function gameReducer(state: GameState, action: GameAction): GameState {
  */
 export function GameProvider({ children }: { children: ReactNode }) {
   const gameContainerRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const playSfx = useSfx();
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
     gameContainerRef,
-    intervalRef,
+  });
+  const playSfx = useSfx();
+
+  // Use custom hook for drag-select (pointer events) logic
+  const {
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerLeave,
+    handlePointerCancel,
+  } = useDragSelect({
+    gameContainerRef,
+    dispatch,
+    state,
+    playSfx,
   });
 
-  function startTimer() {
-    let t = GAME_DURATION;
-    intervalRef.current = setInterval(() => {
-      t = t - 1;
-      dispatch({
-        type: "UPDATE_TIME",
-        payload: t <= 1 ? 0 : t,
-      });
-
-      if (t <= 1) {
-        clearInterval(intervalRef.current as NodeJS.Timeout);
-      }
+  useEffect(() => {
+    if (!state.running) return;
+    const timerId = setInterval(() => {
+      dispatch({ type: "TICK" });
     }, 1000);
-
-    /* --- cleanup on unmount OR when `running` toggles off --- */
-    return () => clearInterval(intervalRef.current as NodeJS.Timeout);
-  }
+    return () => clearInterval(timerId);
+  }, [state.running, dispatch]);
 
   useEffect(() => {
-    if (state.timeLeft === 0) {
+    if (state.running && state.timeLeft <= 0) {
       dispatch({ type: "END_GAME" });
       sendGAEvent("event", "tenzy_game_end", {
         date: new Date().toISOString(),
       });
     }
-  }, [state.timeLeft]);
+  }, [state.running, state.timeLeft, dispatch]);
 
   function handleGameStart() {
     sendGAEvent("event", "tenzy_game_start", {
       date: new Date().toISOString(),
     });
-    clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "START_GAME",
       payload: {
         gameGridCells: generateGameGridCells(),
       },
     });
-    startTimer();
   }
   function handleGameReset() {
     sendGAEvent("event", "tenzy_game_reset", {
       date: new Date().toISOString(),
     });
-    clearInterval(intervalRef.current as NodeJS.Timeout);
     dispatch({
       type: "RESET_GAME",
       payload: {
         gameGridCells: generateGameGridCells(),
       },
     });
-    startTimer();
-  }
-
-  function handlePointerLeave() {
-    dispatch({ type: "RESET_SELECTION" });
-  }
-
-  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (e.button !== 0 || !gameContainerRef.current) return;
-    const containerBoundingRect =
-      gameContainerRef.current.getBoundingClientRect();
-
-    const originX = e.clientX - containerBoundingRect.left;
-    const originY = e.clientY - containerBoundingRect.top;
-
-    dispatch({
-      type: "SET_SELECTION_BOX",
-      payload: {
-        origin: { x: originX, y: originY },
-        rect: { left: originX, top: originY, width: 0, height: 0 },
-      },
-    });
-  }
-
-  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!state.userSelectBoxOrigin || !gameContainerRef.current) return;
-    const containerBoundingRect =
-      gameContainerRef.current.getBoundingClientRect();
-
-    const originX = e.clientX - containerBoundingRect.left;
-    const originY = e.clientY - containerBoundingRect.top;
-
-    const newRect = {
-      left: Math.min(state.userSelectBoxOrigin.x, originX),
-      top: Math.min(state.userSelectBoxOrigin.y, originY),
-      width: Math.abs(originX - state.userSelectBoxOrigin.x),
-      height: Math.abs(originY - state.userSelectBoxOrigin.y),
-    };
-
-    // Find intersecting fruits
-    const gameGridCellIds = new Set<string>();
-    const gameGridCellElements =
-      gameContainerRef.current.querySelectorAll<HTMLElement>(
-        "[data-selectable='true']"
-      );
-    gameGridCellElements.forEach((gameGridCellElement) => {
-      const gameGridCellBoundingRect =
-        gameGridCellElement.getBoundingClientRect();
-      const rel = {
-        left: gameGridCellBoundingRect.left - containerBoundingRect.left,
-        right: gameGridCellBoundingRect.right - containerBoundingRect.left,
-        top: gameGridCellBoundingRect.top - containerBoundingRect.top,
-        bottom: gameGridCellBoundingRect.bottom - containerBoundingRect.top,
-      };
-      const intersects = !(
-        rel.right < newRect.left ||
-        rel.left > newRect.left + newRect.width ||
-        rel.bottom < newRect.top ||
-        rel.top > newRect.top + newRect.height
-      );
-
-      if (intersects) gameGridCellIds.add(gameGridCellElement.id);
-    });
-
-    dispatch({
-      type: "SET_SELECTION_BOX",
-      payload: {
-        origin: state.userSelectBoxOrigin,
-        rect: newRect,
-      },
-    });
-
-    dispatch({
-      type: "SET_SELECTED_GAME_GRID_CELLS",
-      payload: gameGridCellIds,
-    });
-  }
-
-  function handlePointerUp() {
-    const selectedGameGridCells = state.gameGridCells.filter((gameGridCell) =>
-      state.userSelectedGameGridCells.has(gameGridCell.id)
-    );
-    const sum = selectedGameGridCells.reduce(
-      (acc, gameGridCell) => acc + gameGridCell.value,
-      0
-    );
-
-    if (sum === 10) {
-      playSfx();
-      dispatch({
-        type: "CONSUME_GAME_GRID_CELLS",
-        payload: state.userSelectedGameGridCells,
-      });
-      sendGAEvent("event", "tenzy_game_consume", {
-        date: new Date().toISOString(),
-        grid_cells: Array.from(state.userSelectedGameGridCells),
-      });
-    }
-
-    dispatch({ type: "RESET_SELECTION" });
   }
 
   return (
@@ -307,6 +210,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         handlePointerMove,
         handlePointerUp,
         handlePointerLeave,
+        handlePointerCancel,
         handleGameStart,
         handleGameReset,
       }}

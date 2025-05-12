@@ -2,7 +2,7 @@
 
 import { useGameContext } from "@/app/tenzy/context/GameContext";
 
-export default function FinalScoreMessageRCC() {
+export default function FinalScoreMessage() {
   const { score } = useGameContext();
 
   return (

@@ -1,8 +1,11 @@
-import LeaderboardRSC from "@/app/tenzy/components/LeaderboardRSC";
-import prisma from "@/lib/prisma";
+import Leaderboard from "@/app/tenzy/components/Leaderboard";
+import { API_BASE_URL } from "../constants/config";
 
-export const revalidate = 0;
 export default async function TenzyLeaderboard() {
+  const res = await fetch(`${API_BASE_URL}/api/score`, {
+    next: { revalidate: 0 },
+  });
+  const scores = await res.json();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Leaderboard",
@@ -10,10 +13,6 @@ export default async function TenzyLeaderboard() {
     url: "https://www.whileinqueue.io/tenzy/leaderboard",
     description: "Leaderboard for Tenzy",
   };
-  const scores = await prisma.score.findMany({
-    orderBy: [{ value: "desc" }, { createdAt: "desc" }],
-    include: { user: true },
-  });
 
   return (
     <div className="p-4">
@@ -21,7 +20,7 @@ export default async function TenzyLeaderboard() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <LeaderboardRSC scores={scores} />
+      <Leaderboard scores={scores} />
     </div>
   );
 }

@@ -1,1 +1,1 @@
-export { default } from "./StartScreenRSC";
+export { default, TenzyGameCard } from "./StartScreen";

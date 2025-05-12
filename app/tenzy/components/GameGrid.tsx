@@ -5,11 +5,11 @@ import {
   CELL_SIZE,
 } from "@/app/tenzy/constants/config";
 import { useGameContext } from "@/app/tenzy/context/GameContext";
-import GameGridCell from "@/app/tenzy/components/GameGridCellRSC";
+import GameGridCell from "@/app/tenzy/components/GameGridCell";
 import { GameGridCell as GameGridCellType } from "@/app/tenzy/types";
 import clsx from "clsx";
 
-export default function GameGridRCC() {
+export default function GameGrid() {
   const {
     gameGridCells,
     gameContainerRef,
@@ -19,6 +19,7 @@ export default function GameGridRCC() {
     handlePointerMove,
     handlePointerUp,
     handlePointerLeave,
+    handlePointerCancel,
   } = useGameContext();
 
   // overscroll-contain - prevents refresh / scroll chaining on mobile
@@ -31,6 +32,7 @@ export default function GameGridRCC() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       className={clsx(
         "relative border-1 border-base-900 select-none mx-auto",
         DROP_IN_CLASSNAME_FIX_FOR_MOBILE
