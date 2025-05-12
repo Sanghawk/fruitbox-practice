@@ -9,4 +9,4 @@ export const CELL_SIZE = 44;
 export const GAME_DURATION =
   process.env.NODE_ENV === "production"
     ? 90 // Production: 90 seconds
-    : 5; // Development: 30 seconds
+    : 4; // Development: 30 seconds

@@ -19,6 +19,7 @@ export default function GameGrid() {
     handlePointerMove,
     handlePointerUp,
     handlePointerLeave,
+    handlePointerCancel,
   } = useGameContext();
 
   // overscroll-contain - prevents refresh / scroll chaining on mobile
@@ -31,6 +32,7 @@ export default function GameGrid() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       className={clsx(
         "relative border-1 border-base-900 select-none mx-auto",
         DROP_IN_CLASSNAME_FIX_FOR_MOBILE
