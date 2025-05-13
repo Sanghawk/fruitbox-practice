@@ -30,6 +30,7 @@ export interface GameState {
   gameStatus: GameLifeCycle;
   timeLeft: number;
   running: boolean;
+  duration: number;
 }
 
 // Extend the state interface to include actions
@@ -56,6 +57,7 @@ const initialState: Omit<GameState, "gameContainerRef"> = {
   gameStatus: GameLifeCycle.WAITING_USER_START,
   timeLeft: GAME_DURATION,
   running: false,
+  duration: GAME_DURATION,
 };
 
 export type GameAction =

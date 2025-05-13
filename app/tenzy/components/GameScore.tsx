@@ -4,5 +4,10 @@ import { useGameContext } from "@/app/tenzy/context/GameContext";
 
 export default function GameScore() {
   const { score } = useGameContext();
-  return <p>Score: {score}</p>;
+  return (
+    <div className="font-mono">
+      <span className="text-sm">score:&nbsp;</span>
+      <span className="text-xl font-black">{score}</span>
+    </div>
+  );
 }
