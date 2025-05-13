@@ -3,9 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import clsx from "clsx";
 import "./globals.css";
-import Link from "next/link";
+import Header from "./components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,34 +52,5 @@ export default function RootLayout({
         <GoogleAnalytics gaId="G-Y4FG6PP673" />
       </body>
     </html>
-  );
-}
-
-function Header() {
-  // Header styles
-  const headerStyles = {
-    position: "sticky top-0 left-0 right-0 z-50",
-    dimensions: "h-[64px]",
-    border: "border-b-[1px] border-base-200 dark:border-base-900",
-    bgAndText: "base-bg-and-text",
-  };
-
-  return (
-    <header
-      className={clsx(
-        headerStyles.position,
-        headerStyles.dimensions,
-        headerStyles.border,
-        headerStyles.bgAndText
-      )}
-    >
-      <div className="relative mx-auto max-w-screen-lg h-full">
-        <div className="flex items-center h-full mx-4">
-          <Link className="btn btn-md font-bold text-mono text-xl" href="/">
-            w(q)
-          </Link>
-        </div>
-      </div>
-    </header>
   );
 }
