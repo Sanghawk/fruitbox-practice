@@ -6,8 +6,11 @@ export default function ResetButton() {
   const { handleGameReset } = useGameContext();
 
   return (
-    <button className="btn btn-sm btn-primary w-full" onClick={handleGameReset}>
-      Reset
+    <button
+      className="text-sm btn btn-sm btn-primary font-mono"
+      onClick={handleGameReset}
+    >
+      reset
     </button>
   );
 }
