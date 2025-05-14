@@ -10,7 +10,7 @@ export default function StartScreen() {
           <div className="h-full mx-4 flex flex-col justify-center gap-4">
             <div>
               <div className="text-center mb-4">
-                <h1 className="text-4xl font-bold">Tenzy</h1>
+                <h1 className="page-title">Tenzy</h1>
               </div>
               <Instructions />
             </div>
@@ -30,9 +30,18 @@ function Instructions() {
     <div className="prose dark:prose-invert">
       <h3>How to play</h3>
       <TenzyDescription />
-      <p>
-        View updates to the game: <Link href="/tenzy/changelog">Changelog</Link>
-      </p>
+      <h4>Links</h4>
+      <ul>
+        <li>
+          View updates to the game:{" "}
+          <Link href="/tenzy/changelog">Changelog</Link>
+        </li>
+
+        <li>
+          View the leaderboard:{" "}
+          <Link href="/tenzy/leaderboard">Leaderboard</Link>
+        </li>
+      </ul>
       <p>Good luck!</p>
     </div>
   );
@@ -53,22 +62,14 @@ export function TenzyGameCard() {
     <div className="p-8 ring-1 ring-base-200 dark:ring-base-900 text-base-900 dark:text-base-50 rounded-md px-2 py-1">
       <div className="flex flex-col justify-between p-4">
         <div className="text-left mb-4">
-          <h2 className="text-4xl font-bold">Tenzy</h2>
+          <h2 className="page-title">Tenzy</h2>
         </div>
-        <div className="text-sm mb-4">
-          <TenzyDescription />
-        </div>
+        <Instructions />
         <div></div>
         <div className="flex justify-end">
           <div className="flex gap-2">
             <Link className="px-5 py-2.5 btn btn-sm btn-primary" href="/tenzy">
-              Play
-            </Link>
-            <Link
-              className="px-5 py-2.5 btn btn-sm btn-primary text-sm"
-              href="/tenzy/leaderboard"
-            >
-              🏆
+              Play Tenzy!
             </Link>
           </div>
         </div>

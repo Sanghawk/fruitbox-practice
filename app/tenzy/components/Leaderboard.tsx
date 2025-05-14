@@ -4,7 +4,7 @@ import { Score } from "@/app/tenzy/types";
 export default async function Leaderboard({ scores }: { scores: Score[] }) {
   return (
     <div className="">
-      <h1 className="text-2xl mb-4 font-bold">Tenzy Leaderboard</h1>
+      <h1 className="page-title mb-4">Tenzy Leaderboard</h1>
       <ol className="pl-0 flex flex-col gap-2">
         {scores.map((s, i) => (
           <li
