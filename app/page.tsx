@@ -13,8 +13,8 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="mx-4">
-        <div className="py-4 flex gap-2">
+      <div className="w-full mx-auto max-w-screen-sm p-4">
+        <div className="">
           <TenzyGameCard />
         </div>
       </div>

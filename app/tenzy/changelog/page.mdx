@@ -1,21 +1,34 @@
-import Link from "next/link";
-
 # Tenzy Changelog
 
-<Link href="/tenzy">
-  <button className="btn btn-md btn-primary w-full">Play Tenzy!</button>
-</Link>
-Updated: May 12th, 2025
+Updated: May 13th, 2025
 
-**May 12th, 2025**
-_General changes_
+## **May 13th, 2025**
+
+### Summary:
+
+Making it easier to navigate across Tenzy pages!
+
+There's only 3 Tenzy pages (`/tenzy`, `/tenzy/leaderboard`, `/tenzy/changelog`), but it got confusing how I get from submitting my score to actually viewing it on the leaderboard.
+
+Now, all three navigation options will appear at the top of the page when you land on `/tenzy`!
+
+### _General changes_
+
+- Adds tenzy custom nav options to global header
+  - Dynamically change layout depending on screen size
+- Updates Tenzy game card presentation on home page
+- Syncs all page titles to a single styling for consistency
+
+## **May 12th, 2025**
+
+### _General changes_
 
 - Improves game grid selection speed
 - Reduces timer rerenders
 - Scores are always revalidated
 - Improves FCP on `/tenzy` from 0.52ms to 0.11ms average
 
-_Game changes_
+### _Game changes_
 
 - New game layout!
   - Game timer is now displayed as a colored bar
@@ -24,11 +37,11 @@ _Game changes_
   - Scoreboard repositioned, more visible, and now displays score delta
   - Reset button smaller so that accidental resets are minimized
 
-**May 10th, 2025**
+## **May 10th, 2025**
 
 Lot's of SEO related changes.
 
-_General changes_
+### _General changes_
 
 - Expands metadata objects for all pages with open graph and twitter card support
   - `/`
@@ -39,26 +52,26 @@ _General changes_
 - Supports use of JSON-LD injections
 - Fixes heading structure (i.e.) h1 is now only for significant page titles
 
-**May 9th, 2025**
+## **May 9th, 2025**
 
-_General changes_
+### _General changes_
 
 - Full leaderboard page for tenzy
 
-**May 8th, 2025**
+## **May 8th, 2025**
 
-_General changes_
+### _General changes_
 
 - Moved **Tenzy** into `/tenzy`. `/` is now used for home page for other **While In Queue** games.
 - Created `/tenzy/changelog` to view updates made to **Tenzy**
 - Fixed typo in Tenzy instructions 😉 and adds link to `/tenzy/changelog`
 - Header title changed and now takes you to `/`
 
-_Game changes_
+### _Game changes_
 
 - Added a sound effect when find group sums of 10.
 
-_Balancing_
+### _Balancing_
 
 Adjusted number distribution to create more strategic gameplay:
 

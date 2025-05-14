@@ -17,7 +17,7 @@ export default async function EndScreen() {
           <div className="h-full mx-4 flex flex-col justify-center gap-4">
             <div>
               <div className="text-center mb-4">
-                <h2 className="text-4xl font-bold">Game Over</h2>
+                <h2 className="page-title">Game Over</h2>
               </div>
               <div className="flex flex-col gap-4">
                 <FinalScoreMessage />
