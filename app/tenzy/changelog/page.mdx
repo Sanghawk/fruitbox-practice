@@ -1,6 +1,50 @@
 # Tenzy Changelog
 
-Updated: May 13th, 2025
+Updated: May 15th, 2025
+
+## **May 15th, 2025**
+
+### Summary:
+
+Introducing the new point system! A lot of feedback received was based around creating combinations over 2 cell pairs more rewarding. I hope this new point system reflects this.
+
+### How it works:
+
+`C` = cell count of the selection. For example:\
+[5,5] = 2 cells\
+[7,2,1] = 3 cells\
+[1,1,4,4] = 4 cells
+
+`M_length` = length multiplier. Anything above 2 cell selection benefit from the length multiplier.
+
+`M_length` is calculated:
+
+`M_length` = 1 + (`M_length_weight` \* (`C` - 2))
+
+- Where `C` > 2 and `M_length_weight` is set at _0.1_
+
+`M_shape` = shape multiplier. The selection "shape" can be 1 of 2 things `line` or `rect`. Only selection that are `rect` in shape benefit from this multiplier.
+
+`line` = 1 dimensional selection (1x2, 1x4, etc.)\
+`rect` = 2 dimensional selection (2x2, 3x2, etc.)\
+`I_rect` = 1 if `rect`, 0 if `line`
+
+`M_shape` is calculated:
+
+`M_shape` = 1 + (`M_shape_weight` \* `I_rect`)
+
+- where `M_shape_weight` is set at _0.2_
+
+All together, points are calculated with:
+
+points = `C` \* `M_length` \* `M_shape`
+
+### _General changes_
+
+- Refactors game context so that scoring strategy is it's own module
+- Updates prisma score values to decimal up to 4 places
+- Existing score migrations and updates ui for decimal score values
+- Implements feature flag functionality for scoring strategy
 
 ## **May 13th, 2025**
 

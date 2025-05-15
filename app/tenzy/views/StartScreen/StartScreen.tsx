@@ -30,30 +30,24 @@ function Instructions() {
     <div className="prose dark:prose-invert">
       <h3>How to play</h3>
       <TenzyDescription />
-      <h4>Links</h4>
-      <ul>
-        <li>
-          View updates to the game:{" "}
-          <Link href="/tenzy/changelog">Changelog</Link>
-        </li>
-
-        <li>
-          View the leaderboard:{" "}
-          <Link href="/tenzy/leaderboard">Leaderboard</Link>
-        </li>
-      </ul>
-      <p>Good luck!</p>
+      <p>Select smart, select fast, and aim for high scores!</p>
     </div>
   );
 }
 
 function TenzyDescription() {
   return (
-    <p>
-      Tenzy is a game where you have select numbers on a grid that sum to ten!
-      Points are based on how many numbers on the grid you have cleared. You
-      have 90 seconds to clear as many numbers as possible.
-    </p>
+    <div>
+      <p>
+        Tenzy is a fast-paced number game where you select groups of numbers on
+        an 8x8 grid that add up{" "}
+        <span className="font-extrabold">exactly to 10</span> . You have{" "}
+        <span className="font-extrabold">90 seconds</span> to clear as many
+        cells as possible! Points depend on the number of cells selected and the
+        shape of your selection.{" "}
+        <span className="font-extrabold">More cells = more points</span>.
+      </p>
+    </div>
   );
 }
 
