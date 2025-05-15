@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import { GameGridCellId, Point, Rect } from "@/app/tenzy/types";
 import type { GameState } from "@/app/tenzy/context/GameContext"; // importing GameState type
-import { sendGAEvent } from "@next/third-parties/google";
 import type { GameAction } from "@/app/tenzy/context/GameContext";
+import { scoringStrategy } from "../scoring";
 
 // Define the shape of a cached cell rectangle (relative to container)
 type CellBounds = {
@@ -62,17 +62,18 @@ export function useDragSelect({
       cellRectsRef.current = cellRects;
       // Initialize selection box in state (origin and zero-size rect)
       dispatch({
-        type: "SET_SELECTION_BOX",
+        type: "START_SELECTION",
         payload: {
-          origin: { x: originX, y: originY },
-          rect: { left: originX, top: originY, width: 0, height: 0 },
+          userSelectBoxOrigin: { x: originX, y: originY },
+          userSelectBoxRect: {
+            left: originX,
+            top: originY,
+            width: 0,
+            height: 0,
+          },
         },
       });
-      // Clear any previously selected cells in state
-      dispatch({
-        type: "SET_SELECTED_GAME_GRID_CELLS",
-        payload: new Set<GameGridCellId>(),
-      });
+
       // (Optional: capture the pointer to continue getting events even if it leaves the element)
       // e.currentTarget.setPointerCapture(e.pointerId);
     },
@@ -115,12 +116,12 @@ export function useDragSelect({
       }
       // Update selection box and selected cells in state
       dispatch({
-        type: "SET_SELECTION_BOX",
-        payload: { origin: originRef.current, rect: newRect },
-      });
-      dispatch({
-        type: "SET_SELECTED_GAME_GRID_CELLS",
-        payload: selectedIds,
+        type: "UPDATE_SELECTION",
+        payload: {
+          userSelectBoxOrigin: originRef.current,
+          userSelectBoxRect: newRect,
+          userSelectedGameGridCellIds: selectedIds,
+        },
       });
     },
     [gameContainerRef, dispatch]
@@ -128,23 +129,25 @@ export function useDragSelect({
   const handlePointerUp = useCallback(() => {
     if (!isSelectingRef.current) return;
     isSelectingRef.current = false;
-    // Compute sum of selected cells' values
-    const selectedIds = state.userSelectedGameGridCells; // set from state (updated on last move)
     const selectedCells = state.gameGridCells.filter((cell) =>
-      selectedIds.has(cell.id)
+      state.userSelectedGameGridCellIds.has(cell.id)
     );
-    const sum = selectedCells.reduce((acc, cell) => acc + cell.value, 0);
-    if (sum === 10) {
+    const isValid = scoringStrategy.validate(selectedCells);
+    if (isValid) {
       playSfx();
-      dispatch({ type: "CONSUME_GAME_GRID_CELLS", payload: selectedIds });
-      sendGAEvent("event", "tenzy_game_consume", {
-        date: new Date().toISOString(),
-        grid_cells: Array.from(selectedIds),
+      dispatch({
+        type: "SUBMIT_SELECTION",
+        payload: { userSelectedGameGridCells: selectedCells },
       });
+    } else {
+      dispatch({ type: "RESET_SELECTION" });
     }
-    // Clear selection in state
-    dispatch({ type: "RESET_SELECTION" });
-  }, [state.gameGridCells, state.userSelectedGameGridCells, dispatch, playSfx]);
+  }, [
+    state.gameGridCells,
+    state.userSelectedGameGridCellIds,
+    dispatch,
+    playSfx,
+  ]);
 
   // Pointer Leave: cancel the selection if pointer leaves container
   const handlePointerLeave = useCallback(() => {

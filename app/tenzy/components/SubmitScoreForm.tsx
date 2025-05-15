@@ -24,7 +24,11 @@ export function SubmitScoreForm() {
     const res = await fetch("/api/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, score: score, sessionId }),
+      body: JSON.stringify({
+        name,
+        score: Number(score.toFixed(4)),
+        sessionId,
+      }),
     });
     setStatus(res.ok ? "done" : "error");
   }

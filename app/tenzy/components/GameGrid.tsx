@@ -14,7 +14,7 @@ export default function GameGrid() {
     gameGridCells,
     gameContainerRef,
     userSelectBoxRect,
-    userSelectedGameGridCells,
+    userSelectedGameGridCellIds,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -52,7 +52,7 @@ export default function GameGrid() {
         {gameGridCells.map((gameGridCell: GameGridCellType) => (
           <GameGridCell
             key={gameGridCell.id}
-            selected={userSelectedGameGridCells.has(gameGridCell.id)}
+            selected={userSelectedGameGridCellIds.has(gameGridCell.id)}
             gameGridCell={gameGridCell}
           />
         ))}
