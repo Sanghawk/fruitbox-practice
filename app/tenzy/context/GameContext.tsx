@@ -19,14 +19,16 @@ import { useSfx } from "../hooks/useSfx";
 import { sendGAEvent } from "@next/third-parties/google";
 import { GAME_DURATION } from "../constants/config";
 import { useDragSelect } from "../hooks/useDragSelect";
+import { scoringStrategy } from "../scoring";
 
+// TODO: move this into types
 export interface GameState {
   score: number;
   gameGridCells: GameGridCell[];
   gameContainerRef: React.RefObject<HTMLDivElement | null>;
   userSelectBoxOrigin: Point | null;
   userSelectBoxRect: Rect | null;
-  userSelectedGameGridCells: Set<GameGridCellId>;
+  userSelectedGameGridCellIds: Set<GameGridCellId>;
   gameStatus: GameLifeCycle;
   timeLeft: number;
   running: boolean;
@@ -53,7 +55,7 @@ const initialState: Omit<GameState, "gameContainerRef"> = {
   gameGridCells: [],
   userSelectBoxOrigin: null,
   userSelectBoxRect: null,
-  userSelectedGameGridCells: new Set(),
+  userSelectedGameGridCellIds: new Set(),
   gameStatus: GameLifeCycle.WAITING_USER_START,
   timeLeft: GAME_DURATION,
   running: false,
@@ -61,16 +63,31 @@ const initialState: Omit<GameState, "gameContainerRef"> = {
 };
 
 export type GameAction =
-  | {
-      type: "SET_SELECTION_BOX";
-      payload: { origin: Point | null; rect: Rect | null };
-    }
-  | { type: "SET_SELECTED_GAME_GRID_CELLS"; payload: Set<GameGridCellId> }
-  | { type: "CONSUME_GAME_GRID_CELLS"; payload: Set<GameGridCellId> }
-  | { type: "RESET_SELECTION" }
-  | { type: "START_GAME"; payload: { gameGridCells: GameGridCell[] } }
-  | { type: "RESET_GAME"; payload: { gameGridCells: GameGridCell[] } }
+  | { type: "START_GAME" }
+  | { type: "RESET_GAME" }
   | { type: "END_GAME" }
+  | {
+      type: "START_SELECTION";
+      payload: {
+        userSelectBoxOrigin: Point | null;
+        userSelectBoxRect: Rect | null;
+      };
+    }
+  | {
+      type: "UPDATE_SELECTION";
+      payload: {
+        userSelectBoxOrigin: Point | null;
+        userSelectBoxRect: Rect | null;
+        userSelectedGameGridCellIds: Set<GameGridCellId>;
+      };
+    }
+  | {
+      type: "SUBMIT_SELECTION";
+      payload: {
+        userSelectedGameGridCells: GameGridCell[];
+      };
+    }
+  | { type: "RESET_SELECTION" }
   | { type: "TICK" };
 
 /**
@@ -84,7 +101,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        gameGridCells: action.payload.gameGridCells,
+        gameGridCells: generateGameGridCells(),
         running: true,
       };
     case "RESET_GAME":
@@ -92,7 +109,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...initialState,
         gameStatus: GameLifeCycle.GAME_IN_PROGRESS,
         gameContainerRef: state.gameContainerRef,
-        gameGridCells: action.payload.gameGridCells,
+        gameGridCells: generateGameGridCells(),
         running: true,
       };
     case "END_GAME":
@@ -101,39 +118,54 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         gameStatus: GameLifeCycle.GAME_OVER,
         running: false,
       };
-    case "SET_SELECTION_BOX":
+    case "START_SELECTION":
       return {
         ...state,
-        userSelectBoxOrigin: action.payload.origin,
-        userSelectBoxRect: action.payload.rect,
+        userSelectedGameGridCellIds: new Set(),
+        userSelectBoxOrigin: action.payload.userSelectBoxOrigin,
+        userSelectBoxRect: action.payload.userSelectBoxRect,
       };
-    case "SET_SELECTED_GAME_GRID_CELLS":
-      return { ...state, userSelectedGameGridCells: action.payload };
-    case "CONSUME_GAME_GRID_CELLS":
+    case "UPDATE_SELECTION":
       return {
         ...state,
-        gameGridCells: state.gameGridCells.map((gameGridCell) =>
-          action.payload.has(gameGridCell.id)
+        userSelectBoxOrigin: action.payload.userSelectBoxOrigin,
+        userSelectBoxRect: action.payload.userSelectBoxRect,
+        userSelectedGameGridCellIds: action.payload.userSelectedGameGridCellIds,
+      };
+    case "RESET_SELECTION":
+      return {
+        ...state,
+        userSelectedGameGridCellIds: new Set(),
+        userSelectBoxOrigin: null,
+        userSelectBoxRect: null,
+      };
+    case "SUBMIT_SELECTION":
+      const pointsEarned = scoringStrategy.pointsForClear(
+        action.payload.userSelectedGameGridCells
+      );
+      return {
+        ...state,
+        gameGridCells: state.gameGridCells.map((cell) =>
+          // refill selected cells
+          state.userSelectedGameGridCellIds.has(cell.id)
             ? {
-                ...gameGridCell,
+                ...cell,
                 value: getRandomGameGridCellValue(state.gameGridCells),
               }
-            : gameGridCell
+            : cell
         ),
-        score: state.score + action.payload.size,
+        score: state.score + pointsEarned,
+        userSelectedGameGridCellIds: new Set(),
+        userSelectBoxOrigin: null,
+        userSelectBoxRect: null,
       };
+
     case "TICK":
       return {
         ...state,
         timeLeft: state.timeLeft > 0 ? state.timeLeft - 1 : 0,
       };
-    case "RESET_SELECTION":
-      return {
-        ...state,
-        userSelectedGameGridCells: new Set(),
-        userSelectBoxOrigin: null,
-        userSelectBoxRect: null,
-      };
+
     default:
       return state;
   }
@@ -187,9 +219,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
     dispatch({
       type: "START_GAME",
-      payload: {
-        gameGridCells: generateGameGridCells(),
-      },
     });
   }
   function handleGameReset() {
@@ -198,9 +227,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
     dispatch({
       type: "RESET_GAME",
-      payload: {
-        gameGridCells: generateGameGridCells(),
-      },
     });
   }
 

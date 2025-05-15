@@ -39,5 +39,9 @@ export async function GET(req: Request & { nextUrl: URL }) {
     ...(limit ? { take: Number(limit) } : {}),
     include: { user: true },
   });
-  return NextResponse.json(top);
+  const result = top.map((s) => ({
+    ...s,
+    value: s.value.toNumber(), // or toString() if you prefer strings
+  }));
+  return NextResponse.json(result);
 }

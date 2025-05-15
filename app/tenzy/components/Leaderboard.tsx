@@ -1,10 +1,14 @@
 import clsx from "clsx";
 import { Score } from "@/app/tenzy/types";
 
+function formatNumber(num: number): string {
+  const str = num.toFixed(2);
+  return str.replace(/\.?0+$/, "");
+}
 export default async function Leaderboard({ scores }: { scores: Score[] }) {
   return (
     <div className="">
-      <h1 className="page-title mb-4">Tenzy Leaderboard</h1>
+      <h1 className="page-title mb-4">Tenzy Leaderboardz</h1>
       <ol className="pl-0 flex flex-col gap-2">
         {scores.map((s, i) => (
           <li
@@ -24,7 +28,9 @@ export default async function Leaderboard({ scores }: { scores: Score[] }) {
               {i === 2 && "🥉"}
               {i > 2 && `${i + 1}.`} {s.user.name}
             </span>
-            <span>{s.value} pts</span>
+            <span className="font-mono">
+              {formatNumber(Number(s.value))} pts
+            </span>
           </li>
         ))}
       </ol>
