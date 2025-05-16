@@ -4,7 +4,6 @@ import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
 import FinalScoreMessage from "./FinalScoreMessage";
 import { API_BASE_URL } from "@/app/tenzy/constants/config";
 import { FixedScoreList } from "@/app/tenzy/components/Leaderboard";
-import Link from "next/link";
 export default async function EndScreen() {
   const res = await fetch(`${API_BASE_URL}/api/score?limit=3`, {
     next: { revalidate: 0 },
