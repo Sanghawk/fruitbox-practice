@@ -8,11 +8,17 @@ Updated: May 16th, 2025
 
 Improved the Leaderboard page performance. Performance was measured with FCP and LCP. FCP/LCP before was 670ms. Now, it averages 190ms. That's about a **71.6%** improvement!
 
+Better instruction! First time players have had a difficult time with the selection mechanic. With the new point system in place, I thought it would be a good idea to move an advanced guide to the game, highlighting all the details of how to play the game and detailed explanation of how the point system works. All that now can be viewed at `/tenzy/howtoplay`.
+
 ### _General changes_
 
 - Implements cursor based pagination for fetching scores across all instances of score requests
 - Changes Leaderboard page to work as infinite scroll (every 25 scores)
 - Adds a way to navigate to leaderboard after submitting score
+- Updates sitemap to include crawling of new how to play guide
+- Creates `/tenzy/howtoplay` as an mdx view with detailed information on how to play the game
+- Creates `GameGridDummy` to use in examples inside the how to play tenzy page for better examples
+- Adds links in header and start screen of tenzy to allow direct navigation to the newly added page
 
 ## **May 15th, 2025**
 

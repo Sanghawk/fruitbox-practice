@@ -12,5 +12,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://www.whileinqueue.io/tenzy/changelog",
       lastModified: new Date(),
     },
+    {
+      url: "https://www.whileinqueue.io/tenzy/howtoplay",
+      lastModified: new Date(),
+    },
   ];
 }
