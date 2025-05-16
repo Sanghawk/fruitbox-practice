@@ -1,11 +1,7 @@
 "use client";
 import { useGameContext } from "@/app/tenzy/context/GameContext";
 import { useEffect, useState } from "react";
-
-function formatNumber(num: number): string {
-  const str = num.toFixed(2);
-  return str.replace(/\.?0+$/, "");
-}
+import { formatScore } from "@/app/tenzy/utils/formatScore";
 
 export default function GameScore() {
   const { score } = useGameContext();
@@ -36,13 +32,13 @@ export default function GameScore() {
   return (
     <div className="font-mono">
       <span className="text-sm">score:&nbsp;</span>
-      <span className="text-xl font-black">{formatNumber(score)}</span>
+      <span className="text-xl font-black">{formatScore(score)}</span>
       <span
         className={`text-sm text-green-500 font-mono transition-opacity duration-300 ${
           showDiff ? "opacity-100" : "opacity-0"
         }`}
       >
-        &nbsp;+{formatNumber(diff)}
+        &nbsp;+{formatScore(diff)}
       </span>
     </div>
   );

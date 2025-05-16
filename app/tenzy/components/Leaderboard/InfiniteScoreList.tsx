@@ -3,14 +3,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PaginatedScoreResponse, Score } from "@/app/tenzy/types";
 import clsx from "clsx";
-
+import { formatScore } from "@/app/tenzy/utils/formatScore";
 interface InfiniteScoresListProps extends PaginatedScoreResponse {
   limit: number;
-}
-// TODO: move this to utils
-function formatNumber(num: number): string {
-  const str = num.toFixed(2);
-  return str.replace(/\.?0+$/, "");
 }
 
 export default function InfiniteScoresList({
@@ -73,7 +68,7 @@ export default function InfiniteScoresList({
             {i === 2 && "🥉"}
             {i > 2 && `${i + 1}.`} {s.user.name}
           </span>
-          <span className="font-mono">{formatNumber(Number(s.value))} pts</span>
+          <span className="font-mono">{formatScore(Number(s.value))} pts</span>
         </li>
       ))}
 
