@@ -27,7 +27,16 @@ export enum GameLifeCycle {
 export type Score = {
   id: string;
   value: number;
+  userId: string;
+  createdAt: string;
   user: {
+    id: string;
+    createdAt: string;
     name: string;
   };
 };
+
+export interface PaginatedScoreResponse {
+  items: Score[];
+  nextCursor: string | null;
+}

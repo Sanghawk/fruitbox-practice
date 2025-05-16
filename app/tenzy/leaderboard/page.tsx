@@ -1,12 +1,8 @@
-import Leaderboard from "@/app/tenzy/components/Leaderboard";
-import { API_BASE_URL } from "../constants/config";
+import Leaderboard from "@/app/tenzy/components/Leaderboard/Leaderboard";
 import { Suspense } from "react";
-
 export default async function TenzyLeaderboard() {
-  const res = await fetch(`${API_BASE_URL}/api/score`, {
-    next: { revalidate: 0 },
-  });
-  const scores = await res.json();
+  const limit = 25;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Leaderboard",
@@ -21,8 +17,9 @@ export default async function TenzyLeaderboard() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <h1 className="page-title mb-4">Tenzy Leaderboard</h1>
       <Suspense fallback={null}>
-        <Leaderboard scores={scores} />
+        <Leaderboard limit={limit} />
       </Suspense>
     </div>
   );
