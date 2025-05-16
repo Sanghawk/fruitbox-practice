@@ -21,5 +21,12 @@ export default function LeaderboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="">{children}</div>;
+  return (
+    <div className="">
+      <h1 className="page-title p-4">Tenzy Leaderboard</h1>
+      <div className="sticky top-0 h-[calc(100dvh-168px)] overflow-y-auto">
+        {children}
+      </div>
+    </div>
+  );
 }

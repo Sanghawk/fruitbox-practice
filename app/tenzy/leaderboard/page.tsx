@@ -1,8 +1,15 @@
-import Leaderboard from "@/app/tenzy/components/Leaderboard/Leaderboard";
-import { Suspense } from "react";
+import { Leaderboard } from "@/app/tenzy/components/Leaderboard";
+import { API_BASE_URL } from "../constants/config";
+import { PaginatedScoreResponse } from "../types";
+
 export default async function TenzyLeaderboard() {
   const limit = 25;
+  const res = await fetch(`${API_BASE_URL}/api/score?limit=${limit}`, {
+    next: { revalidate: 0 },
+  });
+  const paginatedScores = (await res.json()) as PaginatedScoreResponse;
 
+  // TODO: this doesn't work
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Leaderboard",
@@ -12,15 +19,12 @@ export default async function TenzyLeaderboard() {
   };
 
   return (
-    <div className="p-4">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="page-title mb-4">Tenzy Leaderboard</h1>
-      <Suspense fallback={null}>
-        <Leaderboard limit={limit} />
-      </Suspense>
-    </div>
+      <Leaderboard limit={limit} {...paginatedScores} />
+    </>
   );
 }

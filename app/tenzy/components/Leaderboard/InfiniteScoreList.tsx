@@ -7,6 +7,7 @@ import clsx from "clsx";
 interface InfiniteScoresListProps extends PaginatedScoreResponse {
   limit: number;
 }
+// TODO: move this to utils
 function formatNumber(num: number): string {
   const str = num.toFixed(2);
   return str.replace(/\.?0+$/, "");
@@ -53,7 +54,7 @@ export default function InfiniteScoresList({
   }, [loadMore, cursor]);
 
   return (
-    <ol className="pl-0 flex flex-col gap-2">
+    <ol className="p-4 flex flex-col gap-2">
       {scores.map((s, i) => (
         <li
           key={s.id}
@@ -78,8 +79,8 @@ export default function InfiniteScoresList({
 
       {/* sentinel */}
       {cursor ? (
-        <li ref={sentinelRef} className="h-8">
-          {loading ? "Loading…" : ""}
+        <li ref={sentinelRef} className="text-center p-4 text-gray-500">
+          {loading ? "Loading more scores…" : "Show more scores"}
         </li>
       ) : (
         <li className="text-center p-4 text-gray-500">No more scores</li>
