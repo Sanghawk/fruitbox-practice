@@ -10,7 +10,7 @@ export class TenzyScoringV2 implements ScoringStrategy {
     const shapeMultiplier = 1 + SHAPE_MULT_FACTOR * isRectSelect(cells);
     const score = cellCount * lengthMultiplier * shapeMultiplier;
 
-    return score;
+    return Number(score.toFixed(4));
   }
   validate(cells: GameGridCell[]): boolean {
     if (cells.length < 2) return false;

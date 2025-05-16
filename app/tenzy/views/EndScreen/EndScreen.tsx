@@ -2,9 +2,8 @@ import StartButton from "@/app/tenzy/components/StartButton";
 import CtxConditionalRenderEndScreen from "./CtxConditionalRenderEndScreen";
 import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
 import FinalScoreMessage from "./FinalScoreMessage";
-import Leaderboard from "@/app/tenzy/components/Leaderboard";
 import { API_BASE_URL } from "@/app/tenzy/constants/config";
-
+import { FixedScoreList } from "@/app/tenzy/components/Leaderboard";
 export default async function EndScreen() {
   const res = await fetch(`${API_BASE_URL}/api/score?limit=3`, {
     next: { revalidate: 0 },
@@ -19,16 +18,17 @@ export default async function EndScreen() {
               <div className="text-center mb-4">
                 <h2 className="page-title">Game Over</h2>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-6">
                 <FinalScoreMessage />
                 <div className="flex flex-col gap-2">
                   <p>Submit your score on the leaderboard:</p>
                   <SubmitScoreForm />
                 </div>
-              </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-xl font-extrabold">Tenzy Top 3</h3>
 
-              <div className="mt-4">
-                <Leaderboard scores={topScores} />
+                  <FixedScoreList scores={topScores.items} />
+                </div>
               </div>
             </div>
 

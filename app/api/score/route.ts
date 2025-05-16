@@ -33,15 +33,39 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request & { nextUrl: URL }) {
-  const limit = req.nextUrl.searchParams.get("limit");
-  const top = await prisma.score.findMany({
-    orderBy: [{ value: "desc" }, { createdAt: "desc" }],
-    ...(limit ? { take: Number(limit) } : {}),
+  const url = req.nextUrl;
+  const limitParam = url.searchParams.get("limit");
+  const cursorParam = url.searchParams.get("cursor");
+
+  // 1. parse inputs
+  const limit = Math.min(Number(limitParam) || 10, 100); // default=10, max=100
+  const cursor = cursorParam ? { id: cursorParam } : undefined;
+
+  // 2. fetch one extra record so we can tell if there *is* a next page
+  const records = await prisma.score.findMany({
+    take: limit + 1,
+    ...(cursor && { cursor, skip: 1 }),
+    orderBy: [
+      { value: "desc" },
+      { createdAt: "desc" },
+      { id: "desc" }, // ensure a deterministic tie‑breaker
+    ],
     include: { user: true },
   });
-  const result = top.map((s) => ({
-    ...s,
-    value: s.value.toNumber(), // or toString() if you prefer strings
+
+  // 3. determine if there's another page
+  let nextCursor: string | null = null;
+  if (records.length > limit) {
+    const nextItem = records.pop()!; // remove the extra
+    nextCursor = nextItem.id; // tell client where to pick up
+  }
+
+  // 4. serialize BigInt and Date fields
+  const items = records.map((r) => ({
+    ...r,
+    value: r.value.toNumber(), // or .toString()
+    createdAt: r.createdAt.toISOString(),
   }));
-  return NextResponse.json(result);
+
+  return NextResponse.json({ items, nextCursor });
 }
