@@ -1,4 +1,4 @@
-import { PaginatedScoreResponse, Score } from "@/app/tenzy/types";
+import { PaginatedScoreResponse } from "@/app/tenzy/types";
 import InfiniteScoresList from "./InfiniteScoreList";
 
 interface LeaderboardProps extends PaginatedScoreResponse {

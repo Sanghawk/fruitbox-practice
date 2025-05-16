@@ -34,7 +34,7 @@ export default function InfiniteScoresList({
     setScores((prev) => [...prev, ...newItems]);
     setCursor(nextCursor);
     setLoading(false);
-  }, [cursor, loading]);
+  }, [cursor, loading, limit]);
 
   // set up intersection observer on the sentinel div
   useEffect(() => {
