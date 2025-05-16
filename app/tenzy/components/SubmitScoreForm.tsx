@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useGameContext } from "@/app/tenzy/context/GameContext";
+import Link from "next/link";
 
 export function SubmitScoreForm() {
   const { score } = useGameContext();
@@ -35,10 +36,16 @@ export function SubmitScoreForm() {
 
   if (status === "done")
     return (
-      <div className="flex flex-col gap-2">
-        <div className="ring-1 ring-green-500/20 text-green-500 bg-green-500/10 font-semibold rounded-md px-2 py-1">
-          Score submitted! 🎉
+      <div className="flex flex-row gap-2">
+        <div className="flex-1 ring-1 ring-green-500/20 text-green-500 bg-green-500/10 rounded-md px-2 py-1">
+          <span className="font-bold text-sm">Score submitted! 🎉</span>
         </div>
+        <Link
+          href="/tenzy/leaderboard"
+          className="btn btn-sm btn-green font-bold"
+        >
+          View leaderboard
+        </Link>
       </div>
     );
 
