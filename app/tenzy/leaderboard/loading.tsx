@@ -1,9 +1,38 @@
 export default function LeaderboardLoading() {
   return (
-    // TODO: add loading skeleton based on infinite-score-list.tsx
-    // note: runs on initial load, waiting for page.tsx to fetch data
-    <div className="p-4">
-      <p className="animate-pulse text-gray-500">Loading users…</p>
-    </div>
+    <ol className="p-4 flex flex-col gap-2">
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/3  animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/4 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/2 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/6 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/3  animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/4 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-1/7 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+      <li className="flex justify-between">
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-2/5 animate-pulse" />
+        <span className="h-4 bg-base-200 dark:bg-base-900 rounded w-16 animate-pulse" />
+      </li>
+    </ol>
   );
 }
