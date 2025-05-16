@@ -78,6 +78,12 @@ function DesktopTenzyNav() {
     <div className="hidden md:flex flex-row gap-1">
       <Link
         className="btn btn-sm btn-primary font-bold text-mono"
+        href="/tenzy/howtoplay"
+      >
+        How to Play
+      </Link>
+      <Link
+        className="btn btn-sm btn-primary font-bold text-mono"
         href="/tenzy/leaderboard"
       >
         Leaderboard
@@ -110,6 +116,13 @@ function MobileTenzyNav({
       {isMenuOpen && (
         <div className="base-bg-and-text absolute right-0 mt-2 w-48 rounded-md  ring-1 ring-base-200 dark:ring-base-900 ring-opacity-5">
           <div className="py-1" role="menu">
+            <Link
+              className="block px-4 py-2 text-md hover:bg-base-200 dark:hover:bg-base-900"
+              href="/tenzy/howtoplay"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              How to Play
+            </Link>
             <Link
               href="/tenzy/leaderboard"
               className="block px-4 py-2 text-md hover:bg-base-200 dark:hover:bg-base-900"

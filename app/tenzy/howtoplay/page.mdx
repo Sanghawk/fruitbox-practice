@@ -1,0 +1,116 @@
+import GameGridDummy from "./GameGridDummy";
+
+# How to Play Tenzy:
+
+Tenzy is a fast-paced number game where you select groups of numbers on an 8x8 grid that add up **exactly to 10**. You have **90 seconds** to clear as many cells as possible!
+
+<GameGridDummy />
+
+### Selection Rules:
+
+- You must select at least **2 adjacent cells**.
+- Selections can only form:
+
+  - **Straight lines** (horizontal or vertical).
+  - **Rectangles** (solid shapes, no gaps).
+
+- You **cannot** make irregular shapes, such as "L" or diagonal selections.
+
+### Scoring System:
+
+Points depend on the **number of cells** selected (**C**) and the **shape** of your selection:
+
+- **More cells = more points:**
+  Larger selections give bonus points. For every additional cell beyond 2, your points increase.
+
+- **Rectangle bonus:**
+  Rectangle-shaped selections receive additional bonus points compared to straight-line selections.
+
+#### Points Formula:
+
+```
+points = C × M_length × M_shape
+```
+
+- **C**: Number of cells selected.
+- **M_length**: Multiplier for length.
+
+  ```
+  M_length = 1 + (0.1 × (C - 2)) for selections larger than 2 cells.
+  ```
+
+- **M_shape**: Multiplier for shape.
+
+  ```
+  M_shape = 1.2 for rectangles, 1.0 for lines.
+  ```
+
+### Example Calculations:
+
+**Example 1: 2-cell straight line**
+
+<GameGridDummy example={"1"} />
+
+- **C** = 2
+- **M_length** = 1.0 (no bonus for 2 cells)
+- **M_shape** = 1.0 (line shape)
+
+**Points** = `2 × 1.0 × 1.0` = **2 points**
+
+---
+
+**Example 2: 3-cell straight line**
+
+<GameGridDummy example={"2"} />
+
+- **C** = 3
+- **M_length** = `1 + (0.1 × (3 - 2))` = **1.1**
+- **M_shape** = 1.0 (line shape)
+
+**Points** = `3 × 1.1 × 1.0` = **3.3 points**
+
+---
+
+**Example 3: 4-cell rectangle**
+
+(rectangle shape)
+
+<GameGridDummy example={"3"} />
+
+- **C** = 4
+- **M_length** = `1 + (0.1 × (4 - 2))` = **1.2**
+- **M_shape** = 1.2 (rectangle bonus)
+
+**Points** = `4 × 1.2 × 1.2` = **5.76 points**
+
+---
+
+**Example 4: 5-cell straight line**
+
+<GameGridDummy example={"4"} />
+
+- **C** = 5
+- **M_length** = `1 + (0.1 × (5 - 2))` = **1.3**
+- **M_shape** = 1.0 (line shape)
+
+**Points** = `5 × 1.3 × 1.0` = **6.5 points**
+
+---
+
+**Example 5: 6-cell rectangle**
+
+(rectangle shape)
+
+<GameGridDummy example={"5"} />
+
+- **C** = 6
+- **M_length** = `1 + (0.1 × (6 - 2))` = **1.4**
+- **M_shape** = 1.2 (rectangle bonus)
+
+**Points** = `6 × 1.4 × 1.2` = **10.08 points**
+
+---
+
+These examples demonstrate how strategic selections—larger groups and rectangle shapes—significantly boost your score.
+
+Select smart, select fast, and aim for high scores!

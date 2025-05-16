@@ -47,6 +47,10 @@ function TenzyDescription() {
         shape of your selection.{" "}
         <span className="font-extrabold">More cells = more points</span>.
       </p>
+      <p>
+        For a detailed guide to the game, see:{" "}
+        <Link href="/tenzy/howtoplay">How to Play Tenzy</Link>.
+      </p>
     </div>
   );
 }
