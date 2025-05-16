@@ -2,14 +2,13 @@ import StartButton from "@/app/tenzy/components/StartButton";
 import CtxConditionalRenderEndScreen from "./CtxConditionalRenderEndScreen";
 import { SubmitScoreForm } from "@/app/tenzy/components/SubmitScoreForm";
 import FinalScoreMessage from "./FinalScoreMessage";
-import Leaderboard from "@/app/tenzy/components/Leaderboard";
-import { API_BASE_URL } from "@/app/tenzy/constants/config";
+// import { API_BASE_URL } from "@/app/tenzy/constants/config";
 
 export default async function EndScreen() {
-  const res = await fetch(`${API_BASE_URL}/api/score?limit=3`, {
-    next: { revalidate: 0 },
-  });
-  const topScores = await res.json();
+  // const res = await fetch(`${API_BASE_URL}/api/score?limit=3`, {
+  //   next: { revalidate: 0 },
+  // });
+  // const topScores = await res.json();
   return (
     <CtxConditionalRenderEndScreen>
       <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
@@ -25,10 +24,6 @@ export default async function EndScreen() {
                   <p>Submit your score on the leaderboard:</p>
                   <SubmitScoreForm />
                 </div>
-              </div>
-
-              <div className="mt-4">
-                <Leaderboard scores={topScores} />
               </div>
             </div>
 
