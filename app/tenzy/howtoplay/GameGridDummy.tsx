@@ -103,15 +103,9 @@ export default function GameGridDummy({ example }: { example: string }) {
     { id: "64", value: 8, col: 7, row: 7 },
   ];
 
-  // overscroll-contain - prevents refresh / scroll chaining on mobile
-  // touch-none - disables all native touch panning so the pointer events fire immediately
-  const DROP_IN_CLASSNAME_FIX_FOR_MOBILE = "overscroll-contain touch-none";
   return (
     <div
-      className={clsx(
-        "relative border-1 border-base-900 select-none mx-auto",
-        DROP_IN_CLASSNAME_FIX_FOR_MOBILE
-      )}
+      className={clsx("relative border-1 border-base-900 select-none mx-auto")}
       style={{
         width: `${BOARD_COLS * CELL_SIZE}px`,
         height: `${BOARD_ROWS * CELL_SIZE}px`,
