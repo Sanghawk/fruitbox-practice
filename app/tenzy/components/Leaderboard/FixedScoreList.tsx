@@ -11,7 +11,7 @@ export default function FixedScoreList({ scores }: FixedScoreListProps) {
       {scores.map((s, i) => (
         <li
           key={s.id}
-          className={clsx("flex justify-between", {
+          className={clsx("flex justify-between text-nowrap", {
             "text-md font-bold px-4 py-2 ring-1 ring-yellow-500/20 text-yellow-600 dark:text-yellow-500 bg-yellow-500/10  rounded-md":
               i === 0,
             "text-md font-bold px-4 py-2 ring-1 ring-gray-500/20 text-gray-700 dark:text-gray-400 bg-gray-500/10 rounded-md":
@@ -20,7 +20,7 @@ export default function FixedScoreList({ scores }: FixedScoreListProps) {
               i === 2,
           })}
         >
-          <span>
+          <span className="truncate">
             {i === 0 && "🥇"}
             {i === 1 && "🥈"}
             {i === 2 && "🥉"}

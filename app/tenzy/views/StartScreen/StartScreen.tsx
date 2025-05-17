@@ -40,12 +40,11 @@ function TenzyDescription() {
     <div>
       <p>
         Tenzy is a fast-paced number game where you select groups of numbers on
-        an 8x8 grid that add up{" "}
-        <span className="font-extrabold">exactly to 10</span> . You have{" "}
-        <span className="font-extrabold">90 seconds</span> to clear as many
-        cells as possible! Points depend on the number of cells selected and the
-        shape of your selection.{" "}
-        <span className="font-extrabold">More cells = more points</span>.
+        an 8x8 grid that add up <span className="font-bold">exactly to 10</span>{" "}
+        . You have <span className="font-bold">90 seconds</span> to clear as
+        many cells as possible! Points depend on the number of cells selected
+        and the shape of your selection.{" "}
+        <span className="font-bold">More cells = more points</span>.
       </p>
       <p>
         For a detailed guide to the game, see:{" "}
