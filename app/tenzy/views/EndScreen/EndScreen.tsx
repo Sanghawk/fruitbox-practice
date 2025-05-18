@@ -11,32 +11,23 @@ export default async function EndScreen() {
   const topScores = await res.json();
   return (
     <CtxConditionalRenderEndScreen>
-      <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
-        <div className="h-[calc(100dvh-64px)]">
-          <div className="h-full mx-4 flex flex-col justify-center gap-4">
-            <div>
-              <div className="text-center mb-4">
-                <h2 className="page-title">Game Over</h2>
-              </div>
-              <div className="flex flex-col gap-6">
-                <FinalScoreMessage />
-                <div className="flex flex-col gap-2">
-                  <p>Submit your score on the leaderboard:</p>
-                  <SubmitScoreForm />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-xl font-extrabold">Tenzy Top 3</h3>
-
-                  <FixedScoreList scores={topScores.items} />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <StartButton text="Play again" />
-            </div>
-          </div>
+      <div className="min-h-full max-w-screen-sm flex flex-col gap-4 items-center justify-center py-4">
+        <div className="w-full text-center mb-4">
+          <h2 className="page-title">Game Over</h2>
         </div>
+        <div className="w-full">
+          <FinalScoreMessage />
+        </div>
+        <div className="w-full flex flex-col gap-2">
+          <p>Submit your score on the leaderboard:</p>
+          <SubmitScoreForm />
+        </div>
+        <div className="w-full flex flex-col gap-2">
+          <h3 className="text-xl font-extrabold">Tenzy Top 3</h3>
+
+          <FixedScoreList scores={topScores.items} />
+        </div>
+        <StartButton text="Play again" />
       </div>
     </CtxConditionalRenderEndScreen>
   );
