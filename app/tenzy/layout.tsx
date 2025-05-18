@@ -30,5 +30,9 @@ export default function TenzyLayout({
 }
 
 function TenzyContainer({ children }: { children: ReactNode }) {
-  return <div className="relative mx-auto max-w-screen-sm">{children}</div>;
+  return (
+    <div className="sticky top-0 left-0 h-[calc(100dvh-64px)] max-w-screen-sm mx-auto overflow-y-auto">
+      <div className="relative h-full mx-4 sm:mx-auto">{children}</div>
+    </div>
+  );
 }
