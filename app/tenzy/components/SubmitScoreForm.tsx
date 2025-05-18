@@ -36,7 +36,7 @@ export function SubmitScoreForm() {
 
   if (status === "done")
     return (
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <div className="flex-1 ring-1 ring-green-500/20 text-green-500 bg-green-500/10 rounded-md px-2 py-1">
           <span className="font-bold text-sm">Score submitted! 🎉</span>
         </div>
