@@ -23,7 +23,7 @@ export default function LeaderboardLayout({
 }) {
   return (
     <div className="">
-      <h1 className="page-title p-4">Tenzy Leaderboard</h1>
+      <h1 className="page-title p-4">Leaderboard</h1>
       <div className="sticky top-0 h-[calc(100dvh-168px)] overflow-y-auto">
         {children}
       </div>

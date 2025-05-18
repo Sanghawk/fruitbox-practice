@@ -104,38 +104,42 @@ export default function GameGridDummy({ example }: { example: string }) {
   ];
 
   return (
-    <div
-      className={clsx("relative border-1 border-base-900 select-none mx-auto")}
-      style={{
-        width: `${BOARD_COLS * CELL_SIZE}px`,
-        height: `${BOARD_ROWS * CELL_SIZE}px`,
-      }}
-    >
+    <div className="overflow-x-scroll overflow-y-hidden">
       <div
-        className="grid"
+        className={clsx(
+          "relative border-1 border-base-900 select-none mx-auto"
+        )}
         style={{
-          gridTemplateRows: `repeat(${BOARD_ROWS}, minmax(0, 1fr))`,
-          gridTemplateColumns: `repeat(${BOARD_COLS}, minmax(0, 1fr))`,
+          width: `${BOARD_COLS * CELL_SIZE}px`,
+          height: `${BOARD_ROWS * CELL_SIZE}px`,
         }}
       >
-        {GAME_GRID_CELLS.map((gameGridCell: GameGridCellType) => (
-          <div
-            key={`gamegridcelldummy-${gameGridCell.id}`}
-            id={gameGridCell.id}
-            data-selectable
-            className={clsx("flex items-center justify-center font-mono ", {
-              "text-base-700 dark:text-base-400": !selectedSet.has(
-                gameGridCell.id
-              ),
-              "bg-base-800 text-base-200 font-bold": selectedSet.has(
-                gameGridCell.id
-              ),
-            })}
-            style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
-          >
-            {gameGridCell.value}
-          </div>
-        ))}
+        <div
+          className="grid"
+          style={{
+            gridTemplateRows: `repeat(${BOARD_ROWS}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${BOARD_COLS}, minmax(0, 1fr))`,
+          }}
+        >
+          {GAME_GRID_CELLS.map((gameGridCell: GameGridCellType) => (
+            <div
+              key={`gamegridcelldummy-${gameGridCell.id}`}
+              id={gameGridCell.id}
+              data-selectable
+              className={clsx("flex items-center justify-center font-mono ", {
+                "text-base-700 dark:text-base-400": !selectedSet.has(
+                  gameGridCell.id
+                ),
+                "bg-base-800 text-base-200 font-bold": selectedSet.has(
+                  gameGridCell.id
+                ),
+              })}
+              style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
+            >
+              {gameGridCell.value}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

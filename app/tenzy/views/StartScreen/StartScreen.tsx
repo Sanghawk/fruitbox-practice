@@ -5,20 +5,13 @@ import Link from "next/link";
 export default function StartScreen() {
   return (
     <CtxConditionalRenderStartScreen>
-      <div className="sticky top-[64px] h-[calc(100dvh-64px)]">
-        <div className="h-[calc(100dvh-64px)]">
-          <div className="h-full mx-4 flex flex-col justify-center gap-4">
-            <div>
-              <div className="text-center mb-4">
-                <h1 className="page-title">Tenzy</h1>
-              </div>
-              <Instructions />
-            </div>
-
-            <div>
-              <StartButton />
-            </div>
+      <div className="min-h-full flex items-center justify-center py-4">
+        <div className="flex flex-col gap-4">
+          <div className="text-center">
+            <h1 className="page-title">Tenzy</h1>
           </div>
+          <Instructions />
+          <StartButton />
         </div>
       </div>
     </CtxConditionalRenderStartScreen>

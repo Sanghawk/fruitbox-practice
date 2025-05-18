@@ -3,7 +3,7 @@ import { StartScreen, ActiveScreen, EndScreen } from "./views";
 
 export default function RootGameEntry() {
   return (
-    <div>
+    <>
       <Suspense fallback={null}>
         <StartScreen />
       </Suspense>
@@ -13,6 +13,6 @@ export default function RootGameEntry() {
       <Suspense fallback={null}>
         <EndScreen />
       </Suspense>
-    </div>
+    </>
   );
 }
